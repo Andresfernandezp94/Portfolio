@@ -1,0 +1,36 @@
+---
+import BoxProjects from "../components/BoxProjects.astro";
+---
+
+<main>
+    <img src="https://unavatar.io/andresfernandezp94/" alt="" />
+    <div>
+        <hr />
+        <h1>¡Hola! 👋🏻</h1>
+        <h3>Bienvenido a mi Portafolio</h3>
+        <hr />
+        <BoxProjects />
+        <hr />
+    </div>
+</main>
+
+<style>
+    main {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        text-align: center;
+        gap: 1rem;
+    }
+    div {
+        margin: 0;
+    }
+
+    img {
+        border-radius: 50%;
+        height: 200px;
+        width: 200px;
+        box-shadow: 0px 0.5px 3px #000000;
+    }
+</style>
