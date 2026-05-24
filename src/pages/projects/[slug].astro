@@ -1,0 +1,175 @@
+---
+import MainLayout from "../../layouts/MainLayout.astro";
+import fs from "node:fs";
+import path from "node:path";
+
+export function getStaticPaths() {
+    const projectDir = path.resolve("src/content/projects");
+    const files = fs
+        .readdirSync(projectDir)
+        .filter((f: { endsWith: (arg0: string) => any }) => f.endsWith(".md"));
+
+    return files.map(
+        (file: { replace: (arg0: string, arg1: string) => any }) => {
+            const slug = file.replace(".md", "");
+            const raw = fs.readFileSync(path.join(projectDir, file), "utf-8");
+
+            const parts = raw.split("---");
+            const fm = parts[1] || "";
+            const content = parts.slice(2).join("---").trim();
+
+            let title = slug;
+            let description = "";
+            let stack: string[] = [];
+
+            const titleMatch = fm.match(/title:\s*"(.+)"/);
+            const descMatch = fm.match(/description:\s*"(.+)"/);
+            const stackMatch = fm.match(/stack:\s*\[(.+)\]/);
+            if (titleMatch) title = titleMatch[1];
+            if (descMatch) description = descMatch[1];
+            if (stackMatch)
+                stack = stackMatch[1]
+                    .split(",")
+                    .map(
+                        (s: {
+                            trim: () => {
+                                (): any;
+                                new (): any;
+                                replace: {
+                                    (arg0: {}, arg1: string): any;
+                                    new (): any;
+                                };
+                            };
+                        }) => s.trim().replace(/"/g, ""),
+                    );
+
+            return {
+                params: { slug },
+                props: { title, description, stack, content },
+            };
+        },
+    );
+}
+
+interface Props {
+    title: string;
+    description: string;
+    stack: string[];
+    content: string;
+}
+
+const { title, description, stack, content } = Astro.props;
+
+function mdToHtml(md: string): string {
+    const lines = String(md).split("\n");
+    let html = "";
+    let i = 0;
+
+    while (i < lines.length) {
+        const line = lines[i];
+
+        if (line.trim() === "") {
+            i++;
+            continue;
+        }
+
+        if (line.startsWith("## ")) {
+            html += `<h2>${line.slice(3).trim()}</h2>\n`;
+            i++;
+            continue;
+        }
+
+        if (line.startsWith("- ")) {
+            html += "<ul>\n";
+            while (i < lines.length && lines[i].startsWith("- ")) {
+                html += `<li>${lines[i].slice(2).trim()}</li>\n`;
+                i++;
+            }
+            html += "</ul>\n";
+            continue;
+        }
+
+        let para = "";
+        while (
+            i < lines.length &&
+            lines[i].trim() !== "" &&
+            !lines[i].startsWith("## ") &&
+            !lines[i].startsWith("- ")
+        ) {
+            para += (para ? " " : "") + lines[i].trim();
+            i++;
+        }
+        if (para) {
+            html += `<p>${para}</p>\n`;
+        }
+    }
+
+    return html;
+}
+
+const htmlContent = mdToHtml(content);
+---
+
+<MainLayout title={`${title} | Andres Fernandez`} description={description}>
+    <section class="pt-32 pb-20 px-6 max-w-4xl mx-auto">
+        <a
+            href="/#proyectos"
+            class="text-sm mb-8 inline-block transition-colors"
+            style={`color: var(--color-accent);`}
+        >
+            ← Volver a Proyectos
+        </a>
+
+        <h1 class="text-4xl md:text-5xl font-bold mb-4">{title}</h1>
+        <p class="text-lg mb-6" style={`color: var(--color-text-secondary);`}>
+            {description}
+        </p>
+
+        <div class="flex flex-wrap gap-2 mb-12">
+            {
+                stack.map((tech: any) => (
+                    <span
+                        class="text-xs px-3 py-1 rounded-md font-medium"
+                        style={`background-color: var(--color-accent-light); color: var(--color-accent);`}
+                    >
+                        {tech}
+                    </span>
+                ))
+            }
+        </div>
+
+        <article class="prose" set:html={htmlContent} />
+    </section>
+</MainLayout>
+
+<style>
+    .prose :global(h2) {
+        font-size: 1.5rem;
+        font-weight: 700;
+        margin-top: 2.5rem;
+        margin-bottom: 1rem;
+        color: var(--color-text);
+    }
+    .prose :global(p) {
+        color: var(--color-text-secondary);
+        line-height: 1.75;
+        margin-bottom: 1rem;
+    }
+    .prose :global(ul) {
+        list-style: none;
+        padding: 0;
+        margin-bottom: 1rem;
+    }
+    .prose :global(li) {
+        color: var(--color-text-muted);
+        padding-left: 1.25rem;
+        position: relative;
+        margin-bottom: 0.5rem;
+    }
+    .prose :global(li)::before {
+        content: "▸";
+        position: absolute;
+        left: 0;
+        color: var(--color-accent);
+    }
+</style>

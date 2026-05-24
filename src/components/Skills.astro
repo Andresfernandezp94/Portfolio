@@ -1,0 +1,78 @@
+---
+const skillGroups = [
+    {
+        title: "Data Engineering",
+        skills: [
+            "Pipelines ETL",
+            "Cargas Incrementales",
+            "Control de Calidad de Datos",
+            "KPI Automation",
+        ],
+    },
+    {
+        title: "Cloud & Serverless",
+        skills: [
+            "AWS RDS",
+            "Lambda Functions",
+            "EventBridge",
+            "S3",
+            "Arquitecturas Serverless",
+        ],
+    },
+    {
+        title: "BI & Analytics",
+        skills: [
+            "Dashboards",
+            "Genesys Cloud",
+            "SQL Server",
+            "Bases de Datos Relacionales y NoSQL",
+        ],
+    },
+    {
+        title: "Desarrollo",
+        skills: [
+            "Node.js",
+            "Python",
+            "TypeScript",
+            "Astro",
+            "Frontend & Backend",
+        ],
+    },
+];
+---
+
+<section id="habilidades" class="py-20 px-6 max-w-6xl mx-auto">
+    <h2 class="text-3xl font-bold mb-2">Habilidades</h2>
+    <div
+        class="w-12 h-1 rounded mb-8"
+        style={`background-color: var(--color-accent);`}
+    >
+    </div>
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        {
+            skillGroups.map((group) => (
+                <div
+                    class="rounded-xl p-6"
+                    style={`background-color: var(--color-bg-card); border: 1px solid var(--color-border);`}
+                >
+                    <h3
+                        class="text-lg font-semibold mb-4"
+                        style={`color: var(--color-accent);`}
+                    >
+                        {group.title}
+                    </h3>
+                    <ul class="space-y-2">
+                        {group.skills.map((skill) => (
+                            <li
+                                class="text-sm"
+                                style={`color: var(--color-text-secondary);`}
+                            >
+                                {skill}
+                            </li>
+                        ))}
+                    </ul>
+                </div>
+            ))
+        }
+    </div>
+</section>

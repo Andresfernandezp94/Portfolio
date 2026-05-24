@@ -1,0 +1,60 @@
+---
+interface Props {
+    name: string;
+    description: string;
+    stack: string[];
+    highlights: string[];
+    slug?: string;
+}
+
+const { name, description, stack, highlights, slug } = Astro.props;
+---
+
+<div
+    class="rounded-xl p-6 transition-all duration-300 hover:-translate-y-1"
+    style={`background-color: var(--color-bg-card); border: 1px solid var(--color-border);`}
+>
+    <h3 class="text-xl font-bold mb-2">{name}</h3>
+    <p class="text-sm mb-4" style={`color: var(--color-text-secondary);`}>
+        {description}
+    </p>
+
+    <div class="flex flex-wrap gap-2 mb-4">
+        {
+            stack.map((tech) => (
+                <span
+                    class="text-xs px-2 py-1 rounded-md font-medium"
+                    style={`background-color: var(--color-accent-light); color: var(--color-accent);`}
+                >
+                    {tech}
+                </span>
+            ))
+        }
+    </div>
+
+    <ul class="mb-4 space-y-1">
+        {
+            highlights.map((h) => (
+                <li
+                    class="text-sm flex items-start gap-2"
+                    style={`color: var(--color-text-muted);`}
+                >
+                    <span style={`color: var(--color-accent);`}>▸</span>
+                    {h}
+                </li>
+            ))
+        }
+    </ul>
+
+    {
+        slug && (
+            <a
+                href={`/projects/${slug}`}
+                class="text-sm font-medium transition-colors"
+                style={`color: var(--color-accent);`}
+            >
+                Ver Caso de Estudio →
+            </a>
+        )
+    }
+</div>
