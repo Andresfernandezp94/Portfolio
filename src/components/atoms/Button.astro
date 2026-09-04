@@ -1,0 +1,31 @@
+---
+interface Props {
+    href: string;
+    label: string;
+    external?: boolean;
+    variant?: "primary" | "outline";
+    class?: string;
+}
+
+const {
+    href,
+    label,
+    external = false,
+    variant = "outline",
+    class: className = "",
+} = Astro.props;
+
+const target = external ? "_blank" : undefined;
+const rel = external ? "noopener noreferrer" : undefined;
+const variantClass = variant === "primary" ? "btn-primary" : "btn-outline";
+---
+
+<a
+    href={href}
+    target={target}
+    rel={rel}
+    class:list={[variantClass, className]}
+>
+    <slot name="icon" />
+    {label}
+</a>

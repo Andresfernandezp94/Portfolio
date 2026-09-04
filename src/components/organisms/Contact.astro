@@ -1,0 +1,36 @@
+---
+import SectionTitle from "../atoms/SectionTitle.astro";
+import ContactLink from "../molecules/ContactLink.astro";
+import Section from "../atoms/Section.astro";
+
+const links = [
+    {
+        href: "mailto:andresfernandezp94@gmail.com",
+        label: "Correo",
+        icon: "email" as const,
+    },
+    {
+        href: "https://github.com/Andresfernandezp94",
+        label: "GitHub",
+        icon: "github" as const,
+        external: true,
+    },
+    {
+        href: "https://www.linkedin.com/in/andresfernandezp94",
+        label: "LinkedIn",
+        icon: "linkedin" as const,
+        external: true,
+    },
+];
+---
+
+<Section id="contacto" ariaLabelledby="contacto-title" class="py-20">
+    <SectionTitle title="Contacto" id="contacto-title" />
+    <p class="text-lg text-text-secondary mb-10 max-w-2xl">
+        ¿Interesado en trabajar juntos o discutir un proyecto de ingeniería de
+        datos? No dudes en contactarme.
+    </p>
+    <div class="flex flex-wrap gap-4">
+        {links.map((link) => <ContactLink {...link} />)}
+    </div>
+</Section>

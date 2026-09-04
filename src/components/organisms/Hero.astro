@@ -1,0 +1,116 @@
+---
+import Button from "../atoms/Button.astro";
+import Section from "../atoms/Section.astro";
+
+const firstName = "Andres";
+const lastName = "Fernandez";
+---
+
+<Section id="hero" class="pt-32 pb-20">
+    <h1 class="hero-name text-5xl md:text-7xl lg:text-8xl font-bold leading-[1.05]">
+        <span class="word">
+            {firstName.split("").map((c) => <span class="char">{c}</span>)}
+        </span><br />
+        <span class="word">
+            {lastName.split("").map((c) => <span class="char">{c}</span>)}
+        </span>
+    </h1>
+
+    <p class="mt-8 text-lg md:text-xl leading-relaxed text-text-secondary">
+        Trabajo con visión multidisciplinaria de la tecnología. Conecto
+        <span class="text-text">datos</span>,
+        <span class="text-text">software</span>,
+        <span class="text-text">IA</span>,
+        <span class="text-text">infraestructura</span> y
+        <span class="text-text">hardware</span> para transformar problemas
+        complejos en soluciones que escalan en producción y generan valor para
+        el negocio.
+    </p>
+
+    <div class="mt-10 flex flex-wrap gap-4">
+        <Button href="#proyectos" label="Ver proyectos" variant="primary">
+            <svg
+                slot="icon"
+                xmlns="http://www.w3.org/2000/svg"
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                aria-hidden="true"
+            >
+                <path d="M5 12h14"></path>
+                <path d="m12 5 7 7-7 7"></path>
+            </svg>
+        </Button>
+        <Button href="#contacto" label="Contactar" variant="outline">
+            <svg
+                slot="icon"
+                xmlns="http://www.w3.org/2000/svg"
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                aria-hidden="true"
+            >
+                <rect width="20" height="16" x="2" y="4" rx="2"></rect>
+                <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"></path>
+            </svg>
+        </Button>
+    </div>
+</Section>
+
+<script>
+    const heroName = document.querySelector(".hero-name");
+    const chars = heroName?.querySelectorAll(".char") ?? [];
+
+    if (heroName && chars.length > 0) {
+        let mouseX = -9999;
+        let mouseY = -9999;
+        let rafId: number | null = null;
+
+        const update = () => {
+            chars.forEach((char) => {
+                const rect = char.getBoundingClientRect();
+                const cx = rect.left + rect.width / 2;
+                const cy = rect.top + rect.height / 2;
+                const dx = mouseX - cx;
+                const dy = mouseY - cy;
+                const dist = Math.hypot(dx, dy);
+                const radius = 140;
+                const intensity = Math.max(
+                    0,
+                    Math.min(1, 1 - dist / radius),
+                );
+                (char as HTMLElement).style.setProperty(
+                    "--intensity",
+                    intensity.toFixed(3),
+                );
+            });
+            rafId = null;
+        };
+
+        heroName.addEventListener("mousemove", (e) => {
+            mouseX = e.clientX;
+            mouseY = e.clientY;
+            if (rafId === null) {
+                rafId = requestAnimationFrame(update);
+            }
+        });
+
+        heroName.addEventListener("mouseleave", () => {
+            mouseX = -9999;
+            mouseY = -9999;
+            if (rafId === null) {
+                rafId = requestAnimationFrame(update);
+            }
+        });
+    }
+</script>

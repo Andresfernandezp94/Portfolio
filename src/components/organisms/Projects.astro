@@ -1,0 +1,52 @@
+---
+import SectionTitle from "../atoms/SectionTitle.astro";
+import ProjectCard from "../molecules/ProjectCard.astro";
+import Section from "../atoms/Section.astro";
+import { featuredProjects, hiddenRepos } from "../../data/projects";
+import { getReposWithLanguages } from "../../lib/github";
+
+const repos = (await getReposWithLanguages("Andresfernandezp94")).filter(
+    (repo) => !hiddenRepos.includes(repo.name),
+);
+---
+
+<Section id="proyectos" ariaLabelledby="proyectos-title" class="py-20">
+    {
+        featuredProjects.length > 0 && (
+            <>
+                <SectionTitle title="Proyectos Destacados" id="proyectos-title" />
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-20">
+                    {featuredProjects.map((project) => (
+                        <ProjectCard
+                            name={project.name}
+                            description={project.description}
+                            tags={project.stack}
+                            highlights={project.highlights}
+                            href={`/projects/${project.slug}`}
+                            cta="Ver Caso de Estudio →"
+                        />
+                    ))}
+                </div>
+            </>
+        )
+    }
+
+    {
+        repos.length > 0 && (
+            <>
+                <SectionTitle title="Repositorios en GitHub" />
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    {repos.map((repo) => (
+                        <ProjectCard
+                            name={repo.name}
+                            description={repo.description}
+                            tags={repo.languages.map((l) => l.language)}
+                            href={repo.html_url}
+                            cta="Ver Repositorio →"
+                        />
+                    ))}
+                </div>
+            </>
+        )
+    }
+</Section>

@@ -1,0 +1,46 @@
+---
+import Card from "../atoms/Card.astro";
+import CardTitle from "../atoms/CardTitle.astro";
+import Tag from "../atoms/Tag.astro";
+
+interface Props {
+    name: string;
+    description: string | null | undefined;
+    tags: string[];
+    href?: string;
+    cta?: string;
+    highlights?: string[];
+}
+
+const { name, description, tags, href, cta = "Ver más →", highlights } = Astro.props;
+---
+
+<Card href={href} class="h-full flex flex-col">
+    <CardTitle>{name}</CardTitle>
+    <p class="text-sm mb-4 text-text-secondary flex-1">
+        {description || "Sin descripción"}
+    </p>
+
+    {
+        highlights && highlights.length > 0 && (
+            <ul class="mb-4 space-y-1">
+                {highlights.map((h) => (
+                    <li class="text-sm flex items-start gap-2 text-text-muted">
+                        <span class="text-accent">▸</span>
+                        {h}
+                    </li>
+                ))}
+            </ul>
+        )
+    }
+
+    <div class="flex flex-wrap gap-2 mb-4">
+        {tags.map((t) => <Tag label={t} />)}
+    </div>
+
+    {
+        href && (
+            <span class="text-sm font-medium text-accent link-accent mt-auto">{cta}</span>
+        )
+    }
+</Card>

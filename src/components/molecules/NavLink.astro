@@ -1,0 +1,19 @@
+---
+interface Props {
+    label: string;
+    href: string;
+    class?: string;
+}
+const { label, href, class: className = "" } = Astro.props;
+---
+
+<a
+    href={href}
+    class:list={[
+        "text-sm py-2 transition-colors hover:text-text",
+        "text-text-secondary md:text-text-secondary",
+        className,
+    ]}
+>
+    {label}
+</a>

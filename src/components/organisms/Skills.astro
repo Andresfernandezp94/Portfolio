@@ -1,0 +1,129 @@
+---
+import SectionTitle from "../atoms/SectionTitle.astro";
+import SkillGroup from "../molecules/SkillGroup.astro";
+import Section from "../atoms/Section.astro";
+
+const skillGroups = [
+    {
+        title: "Cloud Infrastructure",
+        icon: "cloud" as const,
+        description:
+            "Diseño infraestructura cloud reproducible, escalable y operable para correr productos de datos, IA y operación.",
+        tags: [
+            "CloudFormation",
+            "Lambda",
+            "EventBridge",
+            "API Gateway",
+            "SQS",
+            "EC2",
+            "S3",
+            "Cognito",
+            "Amplify",
+            "LocalStack",
+            "WSL",
+        ],
+    },
+    {
+        title: "Data & Analytics",
+        icon: "data" as const,
+        description:
+            "Construyo pipelines de datos confiables, modelado analítico y dashboards que la operación y el negocio realmente consultan.",
+        tags: [
+            "Glue",
+            "Athena",
+            "RDS",
+            "DynamoDB",
+            "MongoDB",
+            "SQL Server",
+            "QuickSight",
+            "Power BI",
+            "ETL",
+            "KPI automation",
+            "Genesys Cloud",
+        ],
+    },
+    {
+        title: "AI & Agents",
+        icon: "ai" as const,
+        description:
+            "Diseño y opero productos con LLMs, agentes y capacidades multimodales listos para producción.",
+        tags: [
+            "Bedrock",
+            "Bedrock Agent",
+            "LLM providers",
+            "RAG",
+            "Knowledge Base",
+            "S3 Vectors",
+            "Embeddings",
+            "OpenVINO",
+            "Multi-agent",
+        ],
+    },
+    {
+        title: "Hardware & Firmware",
+        icon: "hardware" as const,
+        description:
+            "Programo microcontroladores, firmware y drivers para que el hardware cumpla exactamente lo que el producto necesita.",
+        tags: [
+            "C",
+            "ARM",
+            "BIOS/UEFI",
+            "Microcontroladores",
+            "Firmware bare-metal",
+            "Kernel drivers",
+            "DKMS",
+            "GPIO",
+            "sysfs",
+            "WMI",
+        ],
+    },
+    {
+        title: "Signal & Telecom",
+        icon: "signal" as const,
+        description:
+            "Proceso señales analógicas y digitales, opero buses de comunicación entre dispositivos e integro hardware con software.",
+        tags: [
+            "ADC",
+            "DAC",
+            "PWM",
+            "AC/DC",
+            "I²C",
+            "SPI",
+            "UART",
+            "Bluetooth",
+            "Wireless",
+        ],
+    },
+    {
+        title: "Systems & Backend",
+        icon: "systems" as const,
+        description:
+            "Diseño servicios de larga vida y APIs distribuidas; construyo productos end-to-end combinando backend, datos y la interfaz que el usuario realmente usa.",
+        tags: [
+            "Rust",
+            "Python",
+            "Node.js",
+            "TypeScript",
+            "React",
+            "Astro",
+            "Tailwind",
+            "Docker",
+            "systemd",
+            "DBus",
+            "REST",
+            "GraphQL",
+        ],
+    },
+];
+---
+
+<Section id="habilidades" ariaLabelledby="habilidades-title" class="py-20">
+    <SectionTitle title="Habilidades" id="habilidades-title" />
+    <p class="text-lg text-text-secondary mb-10 max-w-2xl">
+        Cada tarjeta describe una capacidad. Los chips debajo listan las
+        herramientas y servicios con los que la ejecuto en producción.
+    </p>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        {skillGroups.map((group) => <SkillGroup {...group} />)}
+    </div>
+</Section>

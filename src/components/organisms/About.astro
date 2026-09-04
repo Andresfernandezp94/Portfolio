@@ -1,0 +1,61 @@
+---
+import SectionTitle from "../atoms/SectionTitle.astro";
+import Section from "../atoms/Section.astro";
+---
+
+<Section id="sobre-mi" ariaLabelledby="sobre-mi-title" class="py-20">
+    <SectionTitle title="Sobre mí" id="sobre-mi-title" />
+
+    <div class="space-y-5">
+        <p class="text-lg leading-relaxed text-text-secondary">
+            Trabajo con una mirada integral del ecosistema tecnológico: me muevo
+            entre datos, software, inteligencia artificial, infraestructura y
+            sistemas físicos para convertirlos en soluciones reales.
+        </p>
+        <p class="text-lg leading-relaxed text-text-secondary">
+            Mi forma de trabajar parte del problema, no de la herramienta. Antes
+            de elegir tecnología, busco entender cómo interactúan las capas del
+            sistema, qué restricciones existen y dónde está la oportunidad. Esa
+            lectura sistémica me permite integrar disciplinas que normalmente
+            operan por separado: pipelines de datos con servicios cloud,
+            agentes de IA con sistemas embebidos, automatizaciones con
+            hardware.
+        </p>
+        <p class="text-lg leading-relaxed text-text-secondary">
+            He diseñado y llevado a producción plataformas de datos, productos
+            conversacionales con IA, sistemas Linux de baja latencia y
+            arquitecturas donde software y electrónica operan como una sola
+            pieza. Mi trabajo se traduce en automatización que reduce costos
+            operativos, sistemas que escalan sin perder control y productos que
+            resuelven problemas concretos en distintos sectores de la industria.
+        </p>
+        <p class="text-lg leading-relaxed text-text-secondary">
+            Lo que me diferencia no es la cantidad de tecnologías que conozco,
+            sino mi capacidad para leer el problema completo y elegir el camino
+            correcto. Me muevo con la misma naturalidad entre una API, una base
+            de datos, un microcontrolador y un modelo de lenguaje.
+        </p>
+        <p class="text-lg leading-relaxed text-text-secondary">
+            Mi siguiente frontera está en construir sistemas más autónomos y más
+            cercanos al mundo físico, donde IA, software y hardware operen como
+            una sola arquitectura.
+        </p>
+    </div>
+
+    <div
+        class="mt-12 grid grid-cols-1 sm:grid-cols-3 gap-6 border-t border-border pt-8"
+    >
+        <div>
+            <div class="text-3xl font-bold text-accent font-mono">5+</div>
+            <div class="text-sm text-text-muted mt-1">años en producción</div>
+        </div>
+        <div>
+            <div class="text-3xl font-bold text-accent font-mono">15+</div>
+            <div class="text-sm text-text-muted mt-1">servicios en plataformas serverless</div>
+        </div>
+        <div>
+            <div class="text-3xl font-bold text-accent font-mono">∞</div>
+            <div class="text-sm text-text-muted mt-1">cafés mientras compila Rust</div>
+        </div>
+    </div>
+</Section>

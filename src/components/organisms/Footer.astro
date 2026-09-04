@@ -1,0 +1,43 @@
+---
+const year = new Date().getFullYear();
+
+const links = [
+    { label: "GitHub", href: "https://github.com/Andresfernandezp94" },
+    {
+        label: "LinkedIn",
+        href: "https://www.linkedin.com/in/andresfernandezp94",
+    },
+    {
+        label: "Email",
+        href: "mailto:andresfernandezp94@gmail.com",
+    },
+];
+---
+
+<footer class="w-full border-t border-border">
+    <div class="max-w-5xl mx-auto px-6 sm:px-8 lg:px-10 py-8 flex flex-col md:flex-row md:items-center md:justify-between gap-6">
+        <div>
+            <a href="/" class="text-lg font-bold text-text">
+                AF<span class="text-accent">.</span>
+            </a>
+            <p class="text-sm text-text-muted mt-2 font-mono">
+                © {year} Andres Fernandez · Construido con Astro & Tailwind
+            </p>
+        </div>
+
+        <nav aria-label="Links secundarios" class="flex flex-wrap gap-6">
+            {
+                links.map((link) => (
+                    <a
+                        href={link.href}
+                        class="text-sm text-text-secondary hover:text-accent transition-colors"
+                        rel={link.href.startsWith("http") ? "noopener noreferrer" : undefined}
+                        target={link.href.startsWith("http") ? "_blank" : undefined}
+                    >
+                        {link.label}
+                    </a>
+                ))
+            }
+        </nav>
+    </div>
+</footer>

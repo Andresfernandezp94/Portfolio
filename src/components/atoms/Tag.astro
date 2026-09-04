@@ -1,0 +1,45 @@
+---
+interface Props {
+    label: string;
+    href?: string;
+    providerAbbr?: string;
+    providerColor?: string;
+    providerBg?: string;
+    class?: string;
+}
+
+const {
+    label,
+    href,
+    providerAbbr,
+    providerColor,
+    providerBg,
+    class: className = "",
+} = Astro.props;
+---
+
+{href ? (
+    <a href={href} class:list={["tag hover:opacity-80", className]}>
+        {providerAbbr && (
+            <span
+                class="provider-badge"
+                style={`color: ${providerColor}; background: ${providerBg};`}
+            >
+                {providerAbbr}
+            </span>
+        )}
+        {label}
+    </a>
+) : (
+    <span class:list={["tag", className]}>
+        {providerAbbr && (
+            <span
+                class="provider-badge"
+                style={`color: ${providerColor}; background: ${providerBg};`}
+            >
+                {providerAbbr}
+            </span>
+        )}
+        {label}
+    </span>
+)}

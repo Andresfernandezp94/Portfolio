@@ -1,0 +1,61 @@
+---
+import Card from "../atoms/Card.astro";
+import CardTitle from "../atoms/CardTitle.astro";
+import Icon from "../atoms/Icon.astro";
+import Tag from "../atoms/Tag.astro";
+import { getProvider } from "../../data/providers";
+
+interface Props {
+    title: string;
+    description: string;
+    tags: string[];
+    icon: "cloud" | "data" | "ai" | "hardware" | "signal" | "systems";
+    class?: string;
+}
+
+const {
+    title,
+    description,
+    tags,
+    icon,
+    class: className = "",
+} = Astro.props;
+---
+
+<Card
+    interactive={false}
+    class:list={["h-full flex flex-col", className]}
+>
+    <div class="flex items-start gap-3 mb-3">
+        <span
+            class="shrink-0 inline-flex items-center justify-center w-9 h-9 rounded-md bg-accent-light text-accent"
+        >
+            <Icon name={icon} size={18} />
+        </span>
+        <CardTitle class="mb-0 mt-1">{title}</CardTitle>
+    </div>
+
+    <p
+        class="text-sm text-text-secondary leading-relaxed mb-4 flex-1"
+    >
+        {description}
+    </p>
+
+    <div
+        class="flex flex-wrap gap-1.5 pt-3 mt-auto border-t border-border"
+    >
+        {
+            tags.map((tag) => {
+                const provider = getProvider(tag);
+                return (
+                    <Tag
+                        label={tag}
+                        providerAbbr={provider?.abbr}
+                        providerColor={provider?.color}
+                        providerBg={provider?.bg}
+                    />
+                );
+            })
+        }
+    </div>
+</Card>

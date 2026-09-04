@@ -1,175 +1,154 @@
 ---
 import MainLayout from "../../layouts/MainLayout.astro";
-import fs from "node:fs";
-import path from "node:path";
+import Tag from "../../components/atoms/Tag.astro";
+import Section from "../../components/atoms/Section.astro";
+import { getCollection, render, type CollectionEntry } from "astro:content";
+import { getProvider } from "../../data/providers";
 
-export function getStaticPaths() {
-    const projectDir = path.resolve("src/content/projects");
-    const files = fs
-        .readdirSync(projectDir)
-        .filter((f: { endsWith: (arg0: string) => any }) => f.endsWith(".md"));
-
-    return files.map(
-        (file: { replace: (arg0: string, arg1: string) => any }) => {
-            const slug = file.replace(".md", "");
-            const raw = fs.readFileSync(path.join(projectDir, file), "utf-8");
-
-            const parts = raw.split("---");
-            const fm = parts[1] || "";
-            const content = parts.slice(2).join("---").trim();
-
-            let title = slug;
-            let description = "";
-            let stack: string[] = [];
-
-            const titleMatch = fm.match(/title:\s*"(.+)"/);
-            const descMatch = fm.match(/description:\s*"(.+)"/);
-            const stackMatch = fm.match(/stack:\s*\[(.+)\]/);
-            if (titleMatch) title = titleMatch[1];
-            if (descMatch) description = descMatch[1];
-            if (stackMatch)
-                stack = stackMatch[1]
-                    .split(",")
-                    .map(
-                        (s: {
-                            trim: () => {
-                                (): any;
-                                new (): any;
-                                replace: {
-                                    (arg0: {}, arg1: string): any;
-                                    new (): any;
-                                };
-                            };
-                        }) => s.trim().replace(/"/g, ""),
-                    );
-
-            return {
-                params: { slug },
-                props: { title, description, stack, content },
-            };
-        },
+export async function getStaticPaths() {
+    const projects = await getCollection("projects");
+    const sorted = projects.sort(
+        (a, b) => (a.data.order ?? 99) - (b.data.order ?? 99),
     );
+    return sorted.map((project, i) => ({
+        params: { slug: project.id },
+        props: {
+            project,
+            prev: sorted[(i - 1 + sorted.length) % sorted.length],
+            next: sorted[(i + 1) % sorted.length],
+        },
+    }));
 }
 
 interface Props {
-    title: string;
-    description: string;
-    stack: string[];
-    content: string;
+    project: CollectionEntry<"projects">;
+    prev: CollectionEntry<"projects">;
+    next: CollectionEntry<"projects">;
 }
 
-const { title, description, stack, content } = Astro.props;
+const { project, prev, next } = Astro.props;
+const { Content } = await render(project);
 
-function mdToHtml(md: string): string {
-    const lines = String(md).split("\n");
-    let html = "";
-    let i = 0;
-
-    while (i < lines.length) {
-        const line = lines[i];
-
-        if (line.trim() === "") {
-            i++;
-            continue;
-        }
-
-        if (line.startsWith("## ")) {
-            html += `<h2>${line.slice(3).trim()}</h2>\n`;
-            i++;
-            continue;
-        }
-
-        if (line.startsWith("- ")) {
-            html += "<ul>\n";
-            while (i < lines.length && lines[i].startsWith("- ")) {
-                html += `<li>${lines[i].slice(2).trim()}</li>\n`;
-                i++;
-            }
-            html += "</ul>\n";
-            continue;
-        }
-
-        let para = "";
-        while (
-            i < lines.length &&
-            lines[i].trim() !== "" &&
-            !lines[i].startsWith("## ") &&
-            !lines[i].startsWith("- ")
-        ) {
-            para += (para ? " " : "") + lines[i].trim();
-            i++;
-        }
-        if (para) {
-            html += `<p>${para}</p>\n`;
-        }
-    }
-
-    return html;
+interface MetaItem {
+    label: string;
+    value: string;
+    href?: string;
 }
 
-const htmlContent = mdToHtml(content);
+const meta: MetaItem[] = [];
+if (project.data.year) meta.push({ label: "Año", value: project.data.year });
+if (project.data.role) meta.push({ label: "Rol", value: project.data.role });
+if (project.data.github) {
+    meta.push({
+        label: "Repo",
+        value: "GitHub ↗",
+        href: project.data.github,
+    });
+}
 ---
 
-<MainLayout title={`${title} | Andres Fernandez`} description={description}>
-    <section class="pt-32 pb-20 px-6 max-w-4xl mx-auto">
-        <a
-            href="/#proyectos"
-            class="text-sm mb-8 inline-block transition-colors"
-            style={`color: var(--color-accent);`}
-        >
-            ← Volver a Proyectos
-        </a>
+<MainLayout
+    title={`${project.data.title} | Andres Fernandez`}
+    description={project.data.description}
+>
+    <Section class="pt-32 pb-20">
+        <article class="max-w-4xl mx-auto">
+            <a
+                href="/#proyectos"
+                class="inline-flex items-center gap-1 text-sm mb-10"
+                style="color: var(--color-accent);"
+                aria-label="Volver a la lista de proyectos"
+            >
+                <span aria-hidden="true">←</span> Volver a Proyectos
+            </a>
 
-        <h1 class="text-4xl md:text-5xl font-bold mb-4">{title}</h1>
-        <p class="text-lg mb-6" style={`color: var(--color-text-secondary);`}>
-            {description}
-        </p>
+            <header class="mb-12">
+                <h1
+                    class="text-3xl md:text-4xl lg:text-5xl font-bold mb-5 text-text leading-tight"
+                >
+                    {project.data.title}
+                </h1>
+                <p
+                    class="text-lg text-text-secondary mb-6 leading-relaxed"
+                >
+                    {project.data.description}
+                </p>
 
-        <div class="flex flex-wrap gap-2 mb-12">
-            {
-                stack.map((tech: any) => (
-                    <span
-                        class="text-xs px-3 py-1 rounded-md font-medium"
-                        style={`background-color: var(--color-accent-light); color: var(--color-accent);`}
-                    >
-                        {tech}
-                    </span>
-                ))
-            }
-        </div>
+                {
+                    meta.length > 0 && (
+                        <dl class="flex flex-wrap gap-2 mb-6">
+                            {meta.map((m) => (
+                                <div class="meta-pill">
+                                    <dt class="meta-label">{m.label}</dt>
+                                    <dd class="meta-value">
+                                        {m.href ? (
+                                            <a
+                                                href={m.href}
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                            >
+                                                {m.value}
+                                            </a>
+                                        ) : (
+                                            m.value
+                                        )}
+                                    </dd>
+                                </div>
+                            ))}
+                        </dl>
+                    )
+                }
 
-        <article class="prose" set:html={htmlContent} />
-    </section>
+                <div class="flex flex-wrap gap-1.5">
+                    {
+                        project.data.stack.map((tech) => {
+                            const provider = getProvider(tech);
+                            return (
+                                <Tag
+                                    label={tech}
+                                    providerAbbr={provider?.abbr}
+                                    providerColor={provider?.color}
+                                    providerBg={provider?.bg}
+                                />
+                            );
+                        })
+                    }
+                </div>
+            </header>
+
+            <div class="prose">
+                <Content />
+            </div>
+
+            <nav
+                class="project-nav mt-16 pt-8 border-t border-border"
+                aria-label="Navegación entre proyectos"
+            >
+                <a
+                    href={`/projects/${prev.id}`}
+                    class="project-nav-link"
+                    aria-label={`Proyecto anterior: ${prev.data.title}`}
+                >
+                    <span class="project-nav-direction">← Anterior</span>
+                    <span class="project-nav-title">{prev.data.title}</span>
+                </a>
+                <a
+                    href="/#proyectos"
+                    class="project-nav-link text-center"
+                    aria-label="Ver todos los proyectos"
+                >
+                    <span class="project-nav-direction">Todos</span>
+                    <span class="project-nav-title">Ver portafolio</span>
+                </a>
+                <a
+                    href={`/projects/${next.id}`}
+                    class="project-nav-link text-right"
+                    aria-label={`Proyecto siguiente: ${next.data.title}`}
+                >
+                    <span class="project-nav-direction">Siguiente →</span>
+                    <span class="project-nav-title">{next.data.title}</span>
+                </a>
+            </nav>
+        </article>
+    </Section>
 </MainLayout>
-
-<style>
-    .prose :global(h2) {
-        font-size: 1.5rem;
-        font-weight: 700;
-        margin-top: 2.5rem;
-        margin-bottom: 1rem;
-        color: var(--color-text);
-    }
-    .prose :global(p) {
-        color: var(--color-text-secondary);
-        line-height: 1.75;
-        margin-bottom: 1rem;
-    }
-    .prose :global(ul) {
-        list-style: none;
-        padding: 0;
-        margin-bottom: 1rem;
-    }
-    .prose :global(li) {
-        color: var(--color-text-muted);
-        padding-left: 1.25rem;
-        position: relative;
-        margin-bottom: 0.5rem;
-    }
-    .prose :global(li)::before {
-        content: "▸";
-        position: absolute;
-        left: 0;
-        color: var(--color-accent);
-    }
-</style>
