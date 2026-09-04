@@ -15,22 +15,28 @@ const links = [
 ---
 
 <footer class="w-full border-t border-border">
-    <div class="max-w-5xl mx-auto px-6 sm:px-8 lg:px-10 py-8 flex flex-col md:flex-row md:items-center md:justify-between gap-6">
-        <div>
-            <a href="/" class="text-lg font-bold text-text">
+    <div
+        class="max-w-5xl mx-auto px-6 sm:px-8 lg:px-10 py-6 flex flex-col md:flex-row md:items-center md:justify-between gap-4"
+    >
+        <div
+            class="flex flex-wrap items-center gap-x-3 gap-y-1 text-sm text-text-muted font-mono"
+        >
+            <a href="/" class="text-base font-bold text-text">
                 AF<span class="text-accent">.</span>
             </a>
-            <p class="text-sm text-text-muted mt-2 font-mono">
-                © {year} Andres Fernandez · Construido con Astro & Tailwind
-            </p>
+            <span>© {year} Andres Fernandez</span>
+            <span class="hidden sm:inline">· Construido con Astro & Tailwind</span>
         </div>
 
-        <nav aria-label="Links secundarios" class="flex flex-wrap gap-6">
+        <nav
+            aria-label="Links secundarios"
+            class="flex flex-wrap gap-x-6 gap-y-1 text-sm"
+        >
             {
                 links.map((link) => (
                     <a
                         href={link.href}
-                        class="text-sm text-text-secondary hover:text-accent transition-colors"
+                        class="text-text-secondary hover:text-accent transition-colors"
                         rel={link.href.startsWith("http") ? "noopener noreferrer" : undefined}
                         target={link.href.startsWith("http") ? "_blank" : undefined}
                     >
