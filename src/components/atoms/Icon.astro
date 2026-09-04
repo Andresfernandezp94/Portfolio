@@ -1,6 +1,38 @@
 ---
 interface Props {
-    name: "cloud" | "data" | "ai" | "hardware" | "signal" | "systems";
+    name:
+        | "cloud"
+        | "data"
+        | "ai"
+        | "hardware"
+        | "signal"
+        | "systems"
+        | "clock"
+        | "coffee"
+        | "layers"
+        | "aws"
+        | "microsoft"
+        | "mongodb"
+        | "python"
+        | "rust"
+        | "docker"
+        | "react"
+        | "nodejs"
+        | "typescript"
+        | "astro"
+        | "tailwind"
+        | "bluetooth"
+        | "intel"
+        | "arm"
+        | "linux"
+        | "graphql"
+        | "code"
+        | "cube"
+        | "chip"
+        | "zap"
+        | "terminal"
+        | "settings"
+        | "wave";
     class?: string;
     size?: number;
 }
@@ -14,6 +46,32 @@ const ICONS: Record<string, string> = {
     hardware: '<rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/><path d="M9 1v3"/><path d="M15 1v3"/><path d="M9 20v3"/><path d="M15 20v3"/><path d="M20 9h3"/><path d="M20 14h3"/><path d="M1 9h3"/><path d="M1 14h3"/>',
     signal: '<polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>',
     systems: '<polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/>',
+    clock: '<circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>',
+    coffee: '<path d="M17 8h1a4 4 0 0 1 0 8h-1"/><path d="M3 8h14v9a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4Z"/><line x1="6" x2="6" y1="2" y2="4"/><line x1="10" x2="10" y1="2" y2="4"/><line x1="14" x2="14" y1="2" y2="4"/>',
+    layers: '<polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/>',
+    aws: '<path d="M16.5 17.5c-.5.7-1.4 1.3-2.5 1.3-2 0-3.5-1.5-3.5-3.5s1.5-3.5 3.5-3.5c1.2 0 2 .6 2.5 1.3m-2.5 2.2a2.2 2.2 0 1 1 0-4.4 2.2 2.2 0 0 1 0 4.4zm6-9.7c-1.7 0-3 1.3-3 3s1.3 3 3 3 3-1.3 3-3-1.3-3-3-3zm-12 0c-1.7 0-3 1.3-3 3s1.3 3 3 3 3-1.3 3-3-1.3-3-3-3zm6 6c-1.7 0-3 1.3-3 3s1.3 3 3 3 3-1.3 3-3-1.3-3-3-3zm6-12c-1.7 0-3 1.3-3 3s1.3 3 3 3 3-1.3 3-3-1.3-3-3-3z"/>',
+    microsoft: '<rect x="1" y="1" width="10" height="10"/><rect x="13" y="1" width="10" height="10"/><rect x="1" y="13" width="10" height="10"/><rect x="13" y="13" width="10" height="10"/>',
+    mongodb: '<path d="M12 2C8 6 6 10 6 14c0 4 2.5 7 6 8 3.5-1 6-4 6-8 0-4-2-8-6-12zm0 18c-2-2-2-6 0-10 2 4 2 8 0 10z"/>',
+    python: '<path d="M12 2c-3 0-6 .5-6 3v3h6v1H3v3c0 2 2 3 5 3h4v-2c0-2-2-3-5-3h2v-1H4V8c0-1.5 2-2 4-2h4c2 0 4 .5 4 2v3h-6v1h9v-3c0-2.5-3-3-7-3z"/><path d="M12 22c3 0 6-.5 6-3v-3h-6v-1h9v-3c0-2-2-3-5-3h-4v2c0 2 2 3 5 3h-2v1h5v4c0 1.5-2 2-4 2h-4c-2 0-4-.5-4-2v-3h6v-1H3v3c0 2.5 3 3 7 3z"/>',
+    rust: '<path d="M12 2L3 7v10l9 5 9-5V7l-9-5zm0 2.5L19 8v8l-7 4-7-4V8l7-3.5zM12 7a3 3 0 0 0-3 3v4a3 3 0 0 0 6 0v-4a3 3 0 0 0-3-3z"/>',
+    docker: '<path d="M13 2v6h-2v2h2v6h-2v2h2v2H3v-2H1v-2h2v-2H1V8h2V6h2v2h2V6h2V2h6zm6 8h-4v6h4v-6z"/>',
+    react: '<circle cx="12" cy="12" r="2"/><ellipse cx="12" cy="12" rx="10" ry="4"/><ellipse cx="12" cy="12" rx="10" ry="4" transform="rotate(60 12 12)"/><ellipse cx="12" cy="12" rx="10" ry="4" transform="rotate(120 12 12)"/>',
+    nodejs: '<path d="M12 2L2 7v10l10 5 10-5V7L12 2zm0 2.5L19 8v8l-7 4-7-4V8l7-3.5z"/><text x="12" y="16" text-anchor="middle" font-size="6" font-weight="700" fill="currentColor">JS</text>',
+    typescript: '<rect x="3" y="3" width="18" height="18" rx="2"/><text x="12" y="16" text-anchor="middle" font-size="9" font-weight="700" fill="currentColor">TS</text>',
+    astro: '<path d="M12 2l-3 8-7 1 5 5-1 7 6-3 6 3-1-7 5-5-7-1z"/>',
+    tailwind: '<path d="M3 12c2-4 4-6 6-6s3 2 4 6 2 6 4 6 4-2 4-6M9 18c2-4 4-6 6-6s3 2 4 6"/>',
+    bluetooth: '<path d="M6 6l12 12-6 6V0l6 6L6 18"/>',
+    intel: '<path d="M5 6h2v12H5zm4 0h2v12H9zm4 0h2v12h-2zm4 0h2v12h-2z"/>',
+    arm: '<path d="M3 8c2-3 5-5 9-5s7 2 9 5l-3 2c-1-2-3-3-6-3s-5 1-6 3zm6 4l-3-3 3-3 3 3zm-6 4c2 3 5 5 9 5s7-2 9-5l-3-2c-1 2-3 3-6 3s-5-1-6-3z"/>',
+    linux: '<path d="M12 2c-2 0-4 2-4 4 0 1 .5 2 1 3-1 1-3 3-3 6 0 2 1 4 3 5l1 2h4l1-2c2-1 3-3 3-5 0-3-2-5-3-6 .5-1 1-2 1-3 0-2-2-4-4-4zm-2 5h4v2h-4z"/>',
+    graphql: '<path d="M12 2L2 7v10l10 5 10-5V7L12 2zm0 2.5L19 8v8l-7 4-7-4V8l7-3.5zM9 11h6v2H9z"/>',
+    code: '<polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/>',
+    cube: '<path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/>',
+    chip: '<rect x="6" y="6" width="12" height="12" rx="1"/><path d="M9 2v4M15 2v4M9 18v4M15 18v4M2 9h4M2 15h4M18 9h4M18 15h4"/>',
+    zap: '<polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>',
+    terminal: '<polyline points="4 17 10 11 4 5"/><line x1="12" y1="19" x2="20" y2="19"/>',
+    settings: '<circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/>',
+    wave: '<path d="M2 12c2-3 4-3 6 0s4 3 6 0 4-3 6 0"/>',
 };
 ---
 

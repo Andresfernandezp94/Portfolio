@@ -1,23 +1,58 @@
 ---
 import Card from "../atoms/Card.astro";
 import CardTitle from "../atoms/CardTitle.astro";
+import Icon from "../atoms/Icon.astro";
 import Tag from "../atoms/Tag.astro";
+import { getProvider, getTagIcon } from "../../data/providers";
 
 interface Props {
     name: string;
     description: string | null | undefined;
     tags: string[];
+    icon?: string;
+    customIcon?: string;
     href?: string;
     cta?: string;
     highlights?: string[];
 }
 
-const { name, description, tags, href, cta = "Ver más →", highlights } = Astro.props;
+const {
+    name,
+    description,
+    tags,
+    icon = "code",
+    customIcon,
+    href,
+    cta = "Ver más →",
+    highlights,
+} = Astro.props;
 ---
 
-<Card href={href} class="h-full flex flex-col">
-    <CardTitle>{name}</CardTitle>
-    <p class="text-sm mb-4 text-text-secondary flex-1">
+<Card href={href} ghost class="h-full flex flex-col">
+    <div class="flex items-start gap-3 mb-3">
+        <span
+            class="shrink-0 inline-flex items-center justify-center w-9 h-9 rounded-md bg-accent-light text-accent overflow-hidden"
+        >
+            {
+                customIcon ? (
+                    <img
+                        src={customIcon}
+                        alt={`${name} icon`}
+                        width="20"
+                        height="20"
+                        class="w-5 h-5 object-contain"
+                    />
+                ) : (
+                    <Icon name={icon} size={18} />
+                )
+            }
+        </span>
+        <CardTitle class="mb-0 mt-1">{name}</CardTitle>
+    </div>
+
+    <p
+        class="text-sm text-text-secondary leading-relaxed mb-4 flex-1"
+    >
         {description || "Sin descripción"}
     </p>
 
@@ -34,13 +69,36 @@ const { name, description, tags, href, cta = "Ver más →", highlights } = Astr
         )
     }
 
-    <div class="flex flex-wrap gap-2 mb-4">
-        {tags.map((t) => <Tag label={t} />)}
+    <div
+        class="flex flex-wrap gap-1.5 pt-3 mt-auto border-t border-border"
+    >
+        {
+            tags.map((tag) => {
+                const provider = getProvider(tag);
+                const tagIcon = getTagIcon(tag);
+                return (
+                    <Tag
+                        label={tag}
+                        providerAbbr={provider?.abbr}
+                        providerColor={provider?.color}
+                        providerBg={provider?.bg}
+                        tagIcon={tagIcon}
+                        tagIconColor={
+                            tagIcon && provider
+                                ? provider.color
+                                : undefined
+                        }
+                    />
+                );
+            })
+        }
     </div>
 
     {
         href && (
-            <span class="text-sm font-medium text-accent link-accent mt-auto">{cta}</span>
+            <span class="text-sm font-medium text-accent mt-3 inline-block">
+                {cta}
+            </span>
         )
     }
 </Card>

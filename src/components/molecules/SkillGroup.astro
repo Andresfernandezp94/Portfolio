@@ -3,7 +3,7 @@ import Card from "../atoms/Card.astro";
 import CardTitle from "../atoms/CardTitle.astro";
 import Icon from "../atoms/Icon.astro";
 import Tag from "../atoms/Tag.astro";
-import { getProvider } from "../../data/providers";
+import { getProvider, getTagIcon } from "../../data/providers";
 
 interface Props {
     title: string;
@@ -23,6 +23,7 @@ const {
 ---
 
 <Card
+    ghost
     interactive={false}
     class:list={["h-full flex flex-col", className]}
 >
@@ -47,12 +48,19 @@ const {
         {
             tags.map((tag) => {
                 const provider = getProvider(tag);
+                const tagIcon = getTagIcon(tag);
                 return (
                     <Tag
                         label={tag}
                         providerAbbr={provider?.abbr}
                         providerColor={provider?.color}
                         providerBg={provider?.bg}
+                        tagIcon={tagIcon}
+                        tagIconColor={
+                            tagIcon && provider
+                                ? provider.color
+                                : undefined
+                        }
                     />
                 );
             })

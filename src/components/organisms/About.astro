@@ -1,9 +1,10 @@
 ---
 import SectionTitle from "../atoms/SectionTitle.astro";
 import Section from "../atoms/Section.astro";
+import Stat from "../molecules/Stat.astro";
 ---
 
-<Section id="sobre-mi" ariaLabelledby="sobre-mi-title" class="py-20">
+<Section id="sobre-mi" ariaLabelledby="sobre-mi-title" class="pt-12 pb-8">
     <SectionTitle title="Sobre mí" id="sobre-mi-title" />
 
     <div class="space-y-5">
@@ -43,19 +44,22 @@ import Section from "../atoms/Section.astro";
     </div>
 
     <div
-        class="mt-12 grid grid-cols-1 sm:grid-cols-3 gap-6 border-t border-border pt-8"
+        class="mt-12 grid grid-cols-1 sm:grid-cols-3 gap-6 border-t border-border pt-10"
     >
-        <div>
-            <div class="text-3xl font-bold text-accent font-mono">5+</div>
-            <div class="text-sm text-text-muted mt-1">años en producción</div>
-        </div>
-        <div>
-            <div class="text-3xl font-bold text-accent font-mono">15+</div>
-            <div class="text-sm text-text-muted mt-1">servicios en plataformas serverless</div>
-        </div>
-        <div>
-            <div class="text-3xl font-bold text-accent font-mono">∞</div>
-            <div class="text-sm text-text-muted mt-1">cafés mientras compila Rust</div>
-        </div>
+        <Stat
+            value="5+"
+            label="años en producción"
+            icon="clock"
+        />
+        <Stat
+            value="15+"
+            label="servicios en plataformas serverless"
+            icon="layers"
+        />
+        <Stat
+            value="∞"
+            label="cafés mientras compila Rust"
+            icon="coffee"
+        />
     </div>
 </Section>

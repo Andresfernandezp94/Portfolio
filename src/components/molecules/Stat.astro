@@ -1,0 +1,31 @@
+---
+import Icon from "../atoms/Icon.astro";
+
+interface Props {
+    value: string;
+    label: string;
+    icon?: "clock" | "coffee" | "layers";
+    class?: string;
+}
+
+const {
+    value,
+    label,
+    icon,
+    class: className = "",
+} = Astro.props;
+---
+
+<div class:list={["stat", className]}>
+    <div class="stat-row">
+        {
+            icon && (
+                <span class="stat-icon" aria-hidden="true">
+                    <Icon name={icon} size={28} />
+                </span>
+            )
+        }
+        <div class="stat-value">{value}</div>
+    </div>
+    <div class="stat-label">{label}</div>
+</div>

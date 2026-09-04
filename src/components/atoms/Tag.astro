@@ -1,10 +1,15 @@
 ---
+import Icon from "./Icon.astro";
+
 interface Props {
     label: string;
     href?: string;
     providerAbbr?: string;
     providerColor?: string;
     providerBg?: string;
+    providerIcon?: string;
+    tagIcon?: string;
+    tagIconColor?: string;
     class?: string;
 }
 
@@ -14,13 +19,26 @@ const {
     providerAbbr,
     providerColor,
     providerBg,
+    providerIcon,
+    tagIcon,
+    tagIconColor,
     class: className = "",
 } = Astro.props;
+
+const iconColor = tagIconColor ?? providerColor;
 ---
 
 {href ? (
-    <a href={href} class:list={["tag hover:opacity-80", className]}>
-        {providerAbbr && (
+    <a href={href} class:list={["tag", className]}>
+        {tagIcon && (
+            <Icon
+                name={tagIcon}
+                size={11}
+                class="shrink-0"
+                style={`color: ${iconColor};`}
+            />
+        )}
+        {!tagIcon && providerAbbr && (
             <span
                 class="provider-badge"
                 style={`color: ${providerColor}; background: ${providerBg};`}
@@ -32,7 +50,15 @@ const {
     </a>
 ) : (
     <span class:list={["tag", className]}>
-        {providerAbbr && (
+        {tagIcon && (
+            <Icon
+                name={tagIcon}
+                size={11}
+                class="shrink-0"
+                style={`color: ${iconColor};`}
+            />
+        )}
+        {!tagIcon && providerAbbr && (
             <span
                 class="provider-badge"
                 style={`color: ${providerColor}; background: ${providerBg};`}

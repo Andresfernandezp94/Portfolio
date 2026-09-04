@@ -10,18 +10,20 @@ const repos = (await getReposWithLanguages("Andresfernandezp94")).filter(
 );
 ---
 
-<Section id="proyectos" ariaLabelledby="proyectos-title" class="py-20">
+<Section id="proyectos" ariaLabelledby="proyectos-title" class="pt-12 pb-8">
     {
         featuredProjects.length > 0 && (
             <>
                 <SectionTitle title="Proyectos Destacados" id="proyectos-title" />
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-20">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12">
                     {featuredProjects.map((project) => (
                         <ProjectCard
                             name={project.name}
                             description={project.description}
                             tags={project.stack}
                             highlights={project.highlights}
+                            icon={project.icon}
+                            customIcon={project.customIcon}
                             href={`/projects/${project.slug}`}
                             cta="Ver Caso de Estudio →"
                         />

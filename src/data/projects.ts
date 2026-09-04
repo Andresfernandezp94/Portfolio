@@ -4,6 +4,8 @@ export interface FeaturedProject {
     stack: string[];
     highlights: string[];
     slug: string;
+    icon?: string;
+    customIcon?: string;
     github?: string;
     live?: string;
 }
@@ -12,9 +14,10 @@ export const featuredProjects: FeaturedProject[] = [
     {
         name: "neurox",
         slug: "neurox",
+        customIcon: "/projects/neurox-icon.svg",
         description:
             "Orquestador de agentes IA en Rust: daemon local con API HTTP/SSE, agentes aislados por sesión y clientes web/escritorio que comparten un único núcleo.",
-        stack: ["Rust", "Axum", "Tokio", "React", "Systemd", "SSE"],
+        stack: ["Rust", "Axum", "Tokio", "React", "Vite", "TypeScript", "Systemd", "SSE"],
         highlights: [
             "Daemon único, múltiples clientes thin",
             "Aislamiento por sesión (un subproceso por chat)",
@@ -25,6 +28,7 @@ export const featuredProjects: FeaturedProject[] = [
     {
         name: "omen",
         slug: "omen",
+        icon: "hardware",
         description:
             "Stack Linux nativo para HP OMEN Transcend 14: drivers kernel, control térmico, RGB, servicios de IA sobre Intel NPU y configs de audio.",
         stack: ["Linux", "DKMS", "Python", "systemd", "OpenVINO", "Intel NPU"],

@@ -3,10 +3,18 @@ interface Props {
     href?: string;
     class?: string;
     interactive?: boolean;
+    ghost?: boolean;
 }
 
-const { href, class: className = "", interactive = true } = Astro.props;
-const wrapperClass = interactive ? "card card-hover" : "card";
+const {
+    href,
+    class: className = "",
+    interactive = true,
+    ghost = false,
+} = Astro.props;
+
+const baseClass = ghost ? "card card-ghost" : "card";
+const wrapperClass = interactive ? `${baseClass} card-hover` : baseClass;
 ---
 
 {
