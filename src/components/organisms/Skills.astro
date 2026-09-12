@@ -117,13 +117,13 @@ const skillGroups = [
 ];
 ---
 
-<Section id="habilidades" ariaLabelledby="habilidades-title" class="pt-12 pb-8">
+<Section id="habilidades" ariaLabelledby="habilidades-title" class="pt-12 pb-8 reveal">
     <SectionTitle title="Habilidades" id="habilidades-title" />
     <p class="text-lg text-text-secondary mb-10 max-w-2xl">
         Cada tarjeta describe una capacidad. Los chips debajo listan las
         herramientas y servicios con los que la ejecuto en producción.
     </p>
     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-        {skillGroups.map((group) => <SkillGroup {...group} />)}
+        {skillGroups.map((group) => <SkillGroup {...group} class="reveal" />)}
     </div>
 </Section>

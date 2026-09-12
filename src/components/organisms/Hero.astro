@@ -6,8 +6,16 @@ const firstName = "Andres";
 const lastName = "Fernandez";
 ---
 
-<Section id="hero" class="pt-32 pb-8">
-    <h1 class="hero-name text-5xl md:text-7xl lg:text-8xl font-bold leading-[1.05]">
+<Section id="hero" ariaLabelledby="hero-title" class="relative pt-32 pb-8">
+    <div class="hero-glow" aria-hidden="true"></div>
+
+    <p
+        class="font-mono text-xs sm:text-sm uppercase tracking-[0.25em] text-text-muted mb-6"
+    >
+        Data Platform Engineer · BI Solutions Architect
+    </p>
+
+    <h1 id="hero-title" class="hero-name text-5xl md:text-7xl lg:text-8xl font-bold leading-[1.05]">
         <span class="word">
             {firstName.split("").map((c) => <span class="char">{c}</span>)}
         </span><br />

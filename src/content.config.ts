@@ -13,6 +13,7 @@ const projects = defineCollection({
         year: z.string().optional(),
         role: z.string().optional(),
         icon: z.string().optional(),
+        date: z.string().optional(),
     }),
 });
 

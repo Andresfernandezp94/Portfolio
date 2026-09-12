@@ -8,6 +8,10 @@ export interface Repo {
     html_url: string;
     homepage: string | null;
     languages_url: string;
+    stargazers_count: number;
+    forks_count: number;
+    created_at: string;
+    pushed_at: string;
 }
 
 export interface LanguagePercent {
@@ -120,4 +124,32 @@ export async function getReposWithLanguages(
             languages: await getLanguages(repo.languages_url),
         })),
     );
+}
+
+export interface RepoDates {
+    created: string;
+    pushed: string;
+}
+
+export async function getRepoDates(
+    owner: string,
+    repo: string,
+): Promise<RepoDates | null> {
+    const key = `repo-${owner}-${repo}`;
+    const cached = readCache<RepoDates>(key);
+    if (cached) return cached;
+
+    try {
+        const data = await ghFetch<Repo>(
+            `https://api.github.com/repos/${owner}/${repo}`,
+        );
+        const result: RepoDates = {
+            created: data.created_at,
+            pushed: data.pushed_at,
+        };
+        writeCache(key, result);
+        return result;
+    } catch {
+        return null;
+    }
 }

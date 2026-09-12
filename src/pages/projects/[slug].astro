@@ -4,6 +4,7 @@ import Tag from "../../components/atoms/Tag.astro";
 import Section from "../../components/atoms/Section.astro";
 import { getCollection, render, type CollectionEntry } from "astro:content";
 import { getProvider } from "../../data/providers";
+import { getRepoDates } from "../../lib/github";
 
 export async function getStaticPaths() {
     const projects = await getCollection("projects");
@@ -45,11 +46,63 @@ if (project.data.github) {
         href: project.data.github,
     });
 }
+
+const site = Astro.site ?? new URL("https://andresfernandezp94.com");
+const pageURL = new URL(Astro.url.pathname, site).toString();
+
+const githubTarget = project.data.github
+    ? (() => {
+          const match = project.data.github!.match(
+              /github\.com\/([^/]+)\/([^/]+?)(?:\/|$)/,
+          );
+          return match
+              ? { owner: match[1], repo: match[2] }
+              : undefined;
+      })()
+    : undefined;
+
+const gitDates = githubTarget
+    ? await getRepoDates(githubTarget.owner, githubTarget.repo)
+    : null;
+
+const publishedTime = project.data.date ?? gitDates?.created;
+const modifiedTime = project.data.date ?? gitDates?.pushed;
+
+const jsonLd: Record<string, unknown> = {
+    "@context": "https://schema.org",
+    "@type": "SoftwareSourceCode",
+    name: project.data.title,
+    description: project.data.description,
+    url: pageURL,
+    programmingLanguage: project.data.stack,
+    author: {
+        "@type": "Person",
+        name: "Andres Fernandez",
+        url: site.toString(),
+    },
+};
+if (project.data.github) {
+    jsonLd.codeRepository = project.data.github;
+}
+if (publishedTime) {
+    jsonLd.datePublished = publishedTime;
+    jsonLd.copyrightYear = publishedTime.slice(0, 4);
+}
+if (modifiedTime) {
+    jsonLd.dateModified = modifiedTime;
+}
+if (project.data.role) {
+    jsonLd.creditText = project.data.role;
+}
 ---
 
 <MainLayout
     title={`${project.data.title} | Andres Fernandez`}
     description={project.data.description}
+    type="article"
+    publishedTime={publishedTime}
+    modifiedTime={modifiedTime}
+    jsonLd={[jsonLd]}
 >
     <Section class="pt-32 pb-20">
         <article class="max-w-4xl mx-auto">

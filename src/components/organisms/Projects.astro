@@ -10,7 +10,7 @@ const repos = (await getReposWithLanguages("Andresfernandezp94")).filter(
 );
 ---
 
-<Section id="proyectos" ariaLabelledby="proyectos-title" class="pt-12 pb-8">
+<Section id="proyectos" ariaLabelledby="proyectos-title" class="pt-12 pb-8 reveal">
     {
         featuredProjects.length > 0 && (
             <>
@@ -26,6 +26,7 @@ const repos = (await getReposWithLanguages("Andresfernandezp94")).filter(
                             customIcon={project.customIcon}
                             href={`/projects/${project.slug}`}
                             cta="Ver Caso de Estudio →"
+                            class="reveal"
                         />
                     ))}
                 </div>
@@ -44,7 +45,10 @@ const repos = (await getReposWithLanguages("Andresfernandezp94")).filter(
                             description={repo.description}
                             tags={repo.languages.map((l) => l.language)}
                             href={repo.html_url}
+                            stars={repo.stargazers_count}
+                            forks={repo.forks_count}
                             cta="Ver Repositorio →"
+                            class="reveal"
                         />
                     ))}
                 </div>

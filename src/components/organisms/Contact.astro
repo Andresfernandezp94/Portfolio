@@ -1,5 +1,4 @@
 ---
-import SectionTitle from "../atoms/SectionTitle.astro";
 import ContactLink from "../molecules/ContactLink.astro";
 import Section from "../atoms/Section.astro";
 
@@ -24,13 +23,27 @@ const links = [
 ];
 ---
 
-<Section id="contacto" ariaLabelledby="contacto-title" class="pt-12 pb-8">
-    <SectionTitle title="Contacto" id="contacto-title" />
-    <p class="text-lg text-text-secondary mb-10 max-w-2xl">
-        ¿Interesado en trabajar juntos o discutir un proyecto de ingeniería de
-        datos? No dudes en contactarme.
-    </p>
-    <div class="flex flex-wrap gap-4">
-        {links.map((link) => <ContactLink {...link} />)}
+<Section id="contacto" ariaLabelledby="contacto-title" class="pt-12 pb-8 reveal">
+    <div class="contact-panel px-6 sm:px-12 py-14 text-center flex flex-col items-center">
+        <p class="font-mono text-xs uppercase tracking-[0.25em] text-text-muted mb-4">
+            Contacto
+        </p>
+        <h2
+            id="contacto-title"
+            class="text-3xl sm:text-4xl md:text-5xl font-bold text-text leading-tight mb-4"
+        >
+            ¿Construimos algo
+            <span
+                class="bg-gradient-to-r from-[#ffb960] via-[#ffdc91] to-[#ff9a30] bg-clip-text text-transparent"
+                >juntos?</span
+            >
+        </h2>
+        <p class="text-lg text-text-secondary mb-10 max-w-2xl leading-relaxed">
+            ¿Interesado en trabajar juntos o discutir un proyecto de ingeniería
+            de datos? No dudes en contactarme.
+        </p>
+        <div class="flex flex-wrap justify-center gap-4">
+            {links.map((link) => <ContactLink {...link} />)}
+        </div>
     </div>
 </Section>

@@ -5,12 +5,43 @@ import About from "../components/organisms/About.astro";
 import Skills from "../components/organisms/Skills.astro";
 import Projects from "../components/organisms/Projects.astro";
 import Contact from "../components/organisms/Contact.astro";
+
+const site = Astro.site ?? new URL("https://andresfernandezp94.com");
+const url = site.toString();
+
+const jsonLd = {
+    "@context": "https://schema.org",
+    "@graph": [
+        {
+            "@type": "WebSite",
+            "@id": `${url}#website`,
+            url,
+            name: "Andres Fernandez",
+            description:
+                "Portafolio de Andres Fernandez — Data Platform Engineer | BI Solutions Architect | Cloud Data Engineering",
+            inLanguage: "es",
+            publisher: { "@id": `${url}#person` },
+        },
+        {
+            "@type": "Person",
+            "@id": `${url}#person`,
+            url,
+            name: "Andres Fernandez",
+            jobTitle: "Data Platform Engineer | BI Solutions Architect",
+            email: "mailto:andresfernandezp94@gmail.com",
+            sameAs: [
+                "https://github.com/Andresfernandezp94",
+                "https://www.linkedin.com/in/andresfernandezp94",
+            ],
+        },
+    ],
+};
 ---
 
-<MainLayout>
+<MainLayout title="Andres Fernandez — Data Platform Engineer" jsonLd={[jsonLd]}>
     <Hero />
     <About />
-    <Skills />
     <Projects />
+    <Skills />
     <Contact />
 </MainLayout>

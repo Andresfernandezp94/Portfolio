@@ -14,9 +14,13 @@ const links = [
 ];
 ---
 
-<footer class="w-full border-t border-border">
+<footer class="w-full fixed bottom-0 left-0 right-0 z-40 border-t border-border bg-bg/90 backdrop-blur">
     <div
-        class="max-w-5xl mx-auto px-6 sm:px-8 lg:px-10 py-6 flex flex-col md:flex-row md:items-center md:justify-between gap-4"
+        class="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-accent/60 to-transparent"
+        aria-hidden="true"
+    ></div>
+    <div
+        class="max-w-5xl mx-auto px-6 sm:px-8 lg:px-10 py-4 flex flex-col md:flex-row md:items-center md:justify-between gap-3"
     >
         <div
             class="flex flex-wrap items-center gap-x-3 gap-y-1 text-sm text-text-muted font-mono"
@@ -25,7 +29,6 @@ const links = [
                 AF<span class="text-accent">.</span>
             </a>
             <span>© {year} Andres Fernandez</span>
-            <span class="hidden sm:inline">· Construido con Astro & Tailwind</span>
         </div>
 
         <nav

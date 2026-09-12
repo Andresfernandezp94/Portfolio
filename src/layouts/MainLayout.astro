@@ -7,17 +7,45 @@ interface Props {
     title?: string;
     description?: string;
     image?: string;
+    imageAlt?: string;
+    type?: "website" | "article";
+    publishedTime?: string;
+    modifiedTime?: string;
+    noindex?: boolean;
+    jsonLd?: object | object[];
 }
 
 const {
     title = "Andres Fernandez",
     description = "Data Platform Engineer | BI Solutions Architect | Cloud Data Engineering",
     image = "/og-image-v2.jpg",
+    imageAlt = "Andres Fernandez — Data Platform Engineer",
+    type = "website",
+    publishedTime,
+    modifiedTime,
+    noindex = false,
+    jsonLd,
 } = Astro.props;
 
 const siteUrl = Astro.site?.toString() ?? "https://andresfernandezp94.com";
-const canonicalURL = new URL(Astro.url.pathname, Astro.site ?? Astro.url).toString();
+const canonicalURL = new URL(
+    Astro.url.pathname,
+    Astro.site ?? Astro.url,
+).toString();
 const ogImageURL = new URL(image, Astro.site ?? Astro.url).toString();
+const ogImageType = image.toLowerCase().endsWith(".png")
+    ? "image/png"
+    : "image/jpeg";
+
+const robotsContent = noindex
+    ? "noindex, nofollow"
+    : "index, follow, max-image-preview:large, max-snippet:-1";
+
+const jsonLdArray = jsonLd
+    ? Array.isArray(jsonLd)
+        ? jsonLd
+        : [jsonLd]
+    : [];
 ---
 
 <!doctype html>
@@ -25,56 +53,189 @@ const ogImageURL = new URL(image, Astro.site ?? Astro.url).toString();
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>{title}</title>
         <meta name="description" content={description} />
+        <meta name="robots" content={robotsContent} />
+        <meta name="author" content="Andres Fernandez" />
+        <meta name="color-scheme" content="dark" />
         <meta name="theme-color" content="#0a0a0a" />
+        <meta name="format-detection" content="telephone=no" />
 
+        <link rel="canonical" href={canonicalURL} />
         <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
         <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
         <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
         <link rel="icon" type="image/x-icon" href="/favicon.ico" />
         <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
         <link rel="manifest" href="/site.webmanifest" />
-        <link rel="canonical" href={canonicalURL} />
 
-        <link rel="image_src" href={ogImageURL} />
-        <meta itemprop="image" content={ogImageURL} />
-        <meta property="og:type" content="website" />
+        <meta property="og:type" content={type} />
+        <meta property="og:site_name" content="Andres Fernandez" />
         <meta property="og:title" content={title} />
         <meta property="og:description" content={description} />
+        <meta property="og:url" content={canonicalURL} />
+        <meta property="og:locale" content="es_ES" />
         <meta property="og:image" content={ogImageURL} />
+        <meta property="og:image:secure_url" content={ogImageURL} />
+        <meta property="og:image:alt" content={imageAlt} />
+        <meta property="og:image:type" content={ogImageType} />
         <meta property="og:image:width" content="1200" />
         <meta property="og:image:height" content="630" />
-        <meta property="og:image:secure_url" content={ogImageURL} />
-        <meta property="og:image:type" content="image/png" />
-        <meta property="og:image:alt" content="Andres Fernandez — Data Platform Engineer" />
-        <meta property="og:locale" content="es_ES" />
-        <meta property="og:url" content={canonicalURL} />
-        <meta property="og:site_name" content="Andres Fernandez" />
+
+        {
+            type === "article" && publishedTime && (
+                <meta property="article:published_time" content={publishedTime} />
+            )
+        }
+        {type === "article" && modifiedTime && (
+            <meta property="article:modified_time" content={modifiedTime} />
+        )}
 
         <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:site" content="@Andresfernandezp94" />
+        <meta name="twitter:creator" content="@Andresfernandezp94" />
         <meta name="twitter:title" content={title} />
         <meta name="twitter:description" content={description} />
         <meta name="twitter:image" content={ogImageURL} />
         <meta name="twitter:image:src" content={ogImageURL} />
-        <meta name="twitter:image:alt" content="Andres Fernandez — Data Platform Engineer" />
-        <meta name="twitter:site" content="@Andresfernandezp94" />
+        <meta name="twitter:image:alt" content={imageAlt} />
 
-        <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content={title} />
-        <meta name="twitter:description" content={description} />
-        <meta name="twitter:image" content={ogImageURL} />
-        <meta name="twitter:image:alt" content="Andres Fernandez — Data Platform Engineer" />
+        <link rel="image_src" href={ogImageURL} />
+        <meta itemprop="image" content={ogImageURL} />
 
-        <meta name="theme-color" content="#0a0a0a" media="(prefers-color-scheme: dark)" />
-
-        <title>{title}</title>
+        {
+            jsonLdArray.map((data) => (
+                <script
+                    type="application/ld+json"
+                    set:html={JSON.stringify(data)}
+                ></script>
+            ))
+        }
     </head>
     <body>
         <a href="#main-content" class="skip-link">Saltar al contenido</a>
         <Navbar />
-        <main id="main-content">
+        <main id="main-content" class="pb-24">
             <slot />
         </main>
         <Footer />
+
+        <button
+            id="back-to-top"
+            class="back-to-top"
+            aria-label="Volver arriba"
+            aria-hidden="true"
+            tabindex="-1"
+        >
+            <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                aria-hidden="true"
+            >
+                <path d="m18 15-6-6-6 6"></path>
+            </svg>
+        </button>
+
+        <script>
+            const reduceMotion = window.matchMedia(
+                "(prefers-reduced-motion: reduce)",
+            ).matches;
+
+            const revealEls = Array.from(
+                document.querySelectorAll<HTMLElement>(".reveal"),
+            );
+            if (reduceMotion) {
+                revealEls.forEach((el) => el.classList.add("is-visible"));
+            } else if ("IntersectionObserver" in window) {
+                revealEls.forEach((el) => {
+                    const siblings = el.parentElement?.children;
+                    const index = siblings
+                        ? Array.from(siblings).indexOf(el)
+                        : 0;
+                    el.style.transitionDelay = `${(index % 6) * 60}ms`;
+                });
+                const revealObserver = new IntersectionObserver(
+                    (entries) => {
+                        for (const entry of entries) {
+                            if (entry.isIntersecting) {
+                                entry.target.classList.add("is-visible");
+                                revealObserver.unobserve(entry.target);
+                            }
+                        }
+                    },
+                    { threshold: 0.12, rootMargin: "0px 0px -8% 0px" },
+                );
+                revealEls.forEach((el) => revealObserver.observe(el));
+            } else {
+                revealEls.forEach((el) => el.classList.add("is-visible"));
+            }
+
+            const progressBar = document.getElementById("scroll-progress");
+            const backToTop = document.getElementById("back-to-top");
+
+            const docHeight = () =>
+                document.documentElement.scrollHeight -
+                window.innerHeight;
+
+            const onScroll = () => {
+                const y = window.scrollY;
+                const max = docHeight();
+                if (progressBar && max > 0) {
+                    progressBar.style.width = `${(y / max) * 100}%`;
+                }
+                if (backToTop) {
+                    const visible = y > 600;
+                    backToTop.classList.toggle("is-visible", visible);
+                    backToTop.setAttribute("aria-hidden", String(!visible));
+                    backToTop.tabIndex = visible ? 0 : -1;
+                }
+            };
+
+            backToTop?.addEventListener("click", () => {
+                window.scrollTo({ top: 0, behavior: "smooth" });
+            });
+
+            window.addEventListener("scroll", onScroll, { passive: true });
+            onScroll();
+
+            const spyLinks = Array.from(
+                document.querySelectorAll<HTMLAnchorElement>(
+                    'nav a[href^="#"]',
+                ),
+            );
+            const targets = spyLinks
+                .map((link) => document.getElementById(link.getAttribute("href")!.slice(1)))
+                .filter((el): el is HTMLElement => el !== null);
+
+            if ("IntersectionObserver" in window && targets.length > 0) {
+                const spy = new IntersectionObserver(
+                    (entries) => {
+                        for (const entry of entries) {
+                            if (!entry.isIntersecting) continue;
+                            for (const link of spyLinks) {
+                                const active =
+                                    link.getAttribute("href") ===
+                                    `#${entry.target.id}`;
+                                link.classList.toggle("is-active", active);
+                                if (active) {
+                                    link.setAttribute("aria-current", "true");
+                                } else {
+                                    link.removeAttribute("aria-current");
+                                }
+                            }
+                        }
+                    },
+                    { rootMargin: "-45% 0px -50% 0px", threshold: 0 },
+                );
+                targets.forEach((el) => spy.observe(el));
+            }
+        </script>
     </body>
 </html>

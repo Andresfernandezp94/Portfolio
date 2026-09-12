@@ -49,6 +49,7 @@ const links = [
     >
         {links.map((link) => <NavLink {...link} />)}
     </div>
+    <div class="scroll-progress" id="scroll-progress" aria-hidden="true"></div>
 </nav>
 
 <script>
@@ -58,5 +59,9 @@ const links = [
         const isOpen = menu?.classList.toggle("hidden") === false;
         menu?.classList.toggle("flex", isOpen);
         btn.setAttribute("aria-expanded", String(isOpen));
+        btn.setAttribute(
+            "aria-label",
+            isOpen ? "Cerrar menú" : "Abrir menú",
+        );
     });
 </script>
