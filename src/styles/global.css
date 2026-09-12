@@ -224,6 +224,14 @@
         transform: scale(1.05);
     }
 
+    .card-icon-tile img {
+        transition: filter 0.3s ease;
+    }
+
+    .card-hover:hover .card-icon-tile img {
+        filter: brightness(0);
+    }
+
     .project-cta {
         display: inline-flex;
         align-items: center;

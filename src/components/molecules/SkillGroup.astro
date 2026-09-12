@@ -2,13 +2,10 @@
 import Card from "../atoms/Card.astro";
 import CardTitle from "../atoms/CardTitle.astro";
 import Icon from "../atoms/Icon.astro";
-import Tag from "../atoms/Tag.astro";
-import { getProvider, getTagIcon } from "../../data/providers";
 
 interface Props {
     title: string;
     description: string;
-    tags: string[];
     icon: "cloud" | "data" | "ai" | "hardware" | "signal" | "systems";
     class?: string;
 }
@@ -16,7 +13,6 @@ interface Props {
 const {
     title,
     description,
-    tags,
     icon,
     class: className = "",
 } = Astro.props;
@@ -37,33 +33,8 @@ const {
     </div>
 
     <p
-        class="text-sm text-text-secondary leading-relaxed mb-4 flex-1"
+        class="text-sm text-text-secondary leading-relaxed flex-1"
     >
         {description}
     </p>
-
-    <div
-        class="flex flex-wrap gap-1.5 pt-3 mt-auto border-t border-border"
-    >
-        {
-            tags.map((tag) => {
-                const provider = getProvider(tag);
-                const tagIcon = getTagIcon(tag);
-                return (
-                    <Tag
-                        label={tag}
-                        providerAbbr={provider?.abbr}
-                        providerColor={provider?.color}
-                        providerBg={provider?.bg}
-                        tagIcon={tagIcon}
-                        tagIconColor={
-                            tagIcon && provider
-                                ? provider.color
-                                : undefined
-                        }
-                    />
-                );
-            })
-        }
-    </div>
 </Card>

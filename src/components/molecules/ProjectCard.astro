@@ -2,8 +2,6 @@
 import Card from "../atoms/Card.astro";
 import CardTitle from "../atoms/CardTitle.astro";
 import Icon from "../atoms/Icon.astro";
-import Tag from "../atoms/Tag.astro";
-import { getProvider, getTagIcon } from "../../data/providers";
 
 interface Props {
     name: string;
@@ -128,35 +126,10 @@ const showMeta = (stars ?? 0) > 0 || (forks ?? 0) > 0;
         )
     }
 
-    <div
-        class="flex flex-wrap gap-1.5 pt-3 mt-auto border-t border-border"
-    >
-        {
-            tags.map((tag) => {
-                const provider = getProvider(tag);
-                const tagIcon = getTagIcon(tag);
-                return (
-                    <Tag
-                        label={tag}
-                        providerAbbr={provider?.abbr}
-                        providerColor={provider?.color}
-                        providerBg={provider?.bg}
-                        tagIcon={tagIcon}
-                        tagIconColor={
-                            tagIcon && provider
-                                ? provider.color
-                                : undefined
-                        }
-                    />
-                );
-            })
-        }
-    </div>
-
     {
         href && (
             <span
-                class="project-cta text-sm font-medium text-accent mt-3"
+                class="project-cta text-sm font-medium text-accent mt-auto pt-3"
             >
                 <span class="inline-block">{cta}</span>
                 <span class="project-arrow inline-block" aria-hidden="true">
