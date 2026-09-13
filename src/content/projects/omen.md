@@ -7,6 +7,22 @@ featured: true
 github: "https://github.com/Andresfernandezp94/omen"
 year: "2026"
 role: "Ingeniero de plataforma personal"
+milestones:
+  - period: "2024"
+    title: "Transcend 14 en Linux"
+    summary: "Arranque dual e inventario de lo que no funcionaba: WMI térmico, fan control y RGB sin soporte del fabricante."
+  - period: "2024"
+    title: "Drivers DKMS propios"
+    summary: "Módulos del kernel para WMI y control de ventiladores, compilados contra el kernel activo."
+  - period: "2025"
+    title: "Perfiles térmicos con histéresis"
+    summary: "Bandas de temperatura con media móvil y cooldown para evitar cambios de perfil en ráfagas cortas."
+  - period: "2025"
+    title: "IA sobre NPU"
+    summary: "STT, VAD, embeddings, visión y OCR vía OpenVINO sobre la NPU de Intel, todo local y en systemd."
+  - period: "2026"
+    title: "Setup reproducible"
+    summary: "Servicios systemd, configs de audio y reglas udev versionados para repetir el setup desde cero."
 ---
 
 ## Contexto

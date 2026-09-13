@@ -2,6 +2,7 @@
 import MainLayout from "../../layouts/MainLayout.astro";
 import Tag from "../../components/atoms/Tag.astro";
 import Section from "../../components/atoms/Section.astro";
+import Timeline from "../../components/molecules/Timeline.astro";
 import { getCollection, render, type CollectionEntry } from "astro:content";
 import { getProvider } from "../../data/providers";
 import { getRepoDates } from "../../lib/github";
@@ -169,6 +170,18 @@ if (project.data.role) {
                 </div>
             </header>
 
+            {project.data.milestones.length > 0 && (
+                <section class="mb-10" aria-label="Fases del proyecto">
+                    <h2 class="text-2xl font-bold mb-6 text-text">
+                        Fases
+                    </h2>
+                    <Timeline
+                        items={project.data.milestones}
+                        label={`Fases de ${project.data.title}`}
+                    />
+                </section>
+            )}
+
             <div class="prose">
                 <Content />
             </div>
@@ -179,27 +192,23 @@ if (project.data.role) {
             >
                 <a
                     href={`/projects/${prev.id}`}
-                    class="project-nav-link"
+                    class="project-nav-link project-nav-prev"
                     aria-label={`Proyecto anterior: ${prev.data.title}`}
                 >
-                    <span class="project-nav-direction">← Anterior</span>
-                    <span class="project-nav-title">{prev.data.title}</span>
-                </a>
-                <a
-                    href="/#proyectos"
-                    class="project-nav-link text-center"
-                    aria-label="Ver todos los proyectos"
-                >
-                    <span class="project-nav-direction">Todos</span>
-                    <span class="project-nav-title">Ver portafolio</span>
+                    <span class="project-nav-text">
+                        <span class="project-nav-direction">Anterior</span>
+                        <span class="project-nav-title">{prev.data.title}</span>
+                    </span>
                 </a>
                 <a
                     href={`/projects/${next.id}`}
-                    class="project-nav-link text-right"
+                    class="project-nav-link project-nav-next"
                     aria-label={`Proyecto siguiente: ${next.data.title}`}
                 >
-                    <span class="project-nav-direction">Siguiente →</span>
-                    <span class="project-nav-title">{next.data.title}</span>
+                    <span class="project-nav-text">
+                        <span class="project-nav-direction">Siguiente</span>
+                        <span class="project-nav-title">{next.data.title}</span>
+                    </span>
                 </a>
             </nav>
         </article>

@@ -7,6 +7,22 @@ featured: true
 github: "https://github.com/Andresfernandezp94/neurox"
 year: "2025–2026"
 role: "Diseñador y desarrollador principal"
+milestones:
+  - period: "2025 Q3"
+    title: "El origen"
+    summary: "Los wrappers de LLM atan al usuario a un único cliente: sesiones, claves y modelos duplicados sin estado compartido."
+  - period: "2025 Q3"
+    title: "Daemon en Rust"
+    summary: "Primer núcleo con axum y tokio: API HTTP, sesiones en memoria y el arranque del streaming SSE."
+  - period: "2025 Q4"
+    title: "Streaming tipado"
+    summary: "Eventos SSE discretos — thinking, content, tool_call, tool_result, error — compartidos por todos los clientes."
+  - period: "2026"
+    title: "Aislamiento por sesión"
+    summary: "Un agente subproceso por chat: memoria aislada, paralelismo real y cleanup garantizado en crash o timeout."
+  - period: "2026"
+    title: "Clientes thin"
+    summary: "Web (React + Vite) y sidebar (QML) consumiendo el mismo núcleo como UI pura."
 ---
 
 ## Contexto

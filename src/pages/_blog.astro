@@ -1,0 +1,72 @@
+---
+import MainLayout from "../layouts/MainLayout.astro";
+import Section from "../components/atoms/Section.astro";
+import Timeline from "../components/molecules/Timeline.astro";
+import { getCollection } from "astro:content";
+
+const topics = (await getCollection("blog")).sort(
+    (a, b) => (a.data.order ?? 99) - (b.data.order ?? 99),
+);
+
+const entries = topics.flatMap((topic) =>
+    topic.data.milestones.map((milestone) => ({
+        ...milestone,
+        topic: topic.data.title,
+        topicIcon: topic.data.icon,
+    })),
+);
+
+const parseYear = (period: string) =>
+    parseInt(period.match(/\d{4}/)?.[0] ?? "9999", 10);
+
+entries.sort((a, b) => parseYear(a.period) - parseYear(b.period));
+
+const site = Astro.site ?? new URL("https://andresfernandezp94.com");
+const pageURL = new URL(Astro.url.pathname, site).toString();
+
+const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Blog",
+    name: "Blog — Andres Fernandez",
+    description:
+        "Escritos sobre IA, cloud, datos y sistemas embebidos, ordenados en una sola línea de tiempo.",
+    url: pageURL,
+    author: {
+        "@type": "Person",
+        name: "Andres Fernandez",
+        url: site.toString(),
+    },
+};
+---
+
+<MainLayout
+    title="Blog | Andres Fernandez"
+    description="Bitácora técnica de Andres Fernandez: IA, cloud, datos y sistemas, en una sola línea de tiempo."
+    jsonLd={[jsonLd]}
+>
+    <Section class="pt-32 pb-10">
+        <a
+            href="/"
+            class="inline-flex items-center gap-1 text-sm mb-8"
+            style="color: var(--color-accent);"
+            aria-label="Volver al inicio"
+        >
+            <span aria-hidden="true">←</span> Volver al inicio
+        </a>
+
+        <header class="max-w-3xl mb-14">
+            <h1
+                class="text-3xl md:text-4xl lg:text-5xl font-bold mb-5 text-text leading-tight"
+            >
+                Blog
+            </h1>
+            <p class="text-lg text-text-secondary leading-relaxed">
+                Escribo sobre lo que aprendo, tema por tema. Todo ordenado en
+                una sola línea de tiempo: cómo empecé, qué hice, y qué aprendí
+                en el camino.
+            </p>
+        </header>
+
+        <Timeline items={entries} label="Línea de tiempo del blog" />
+    </Section>
+</MainLayout>

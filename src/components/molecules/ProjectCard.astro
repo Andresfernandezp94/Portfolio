@@ -6,31 +6,20 @@ import Icon from "../atoms/Icon.astro";
 interface Props {
     name: string;
     description: string | null | undefined;
-    tags: string[];
     icon?: string;
     customIcon?: string;
     href?: string;
-    cta?: string;
-    highlights?: string[];
-    stars?: number;
-    forks?: number;
     class?: string;
 }
 
 const {
     name,
     description,
-    tags,
     icon = "code",
     customIcon,
     href,
-    cta = "Ver más →",
-    highlights,
-    stars,
-    forks,
     class: className = "",
 } = Astro.props;
-const showMeta = (stars ?? 0) > 0 || (forks ?? 0) > 0;
 ---
 
 <Card href={href} ghost class:list={["h-full flex flex-col", className]}>
@@ -56,99 +45,8 @@ const showMeta = (stars ?? 0) > 0 || (forks ?? 0) > 0;
     </div>
 
     <p
-        class="text-sm text-text-secondary leading-relaxed mb-4 flex-1"
+        class="text-sm text-text-secondary leading-relaxed flex-1"
     >
         {description || "Sin descripción"}
     </p>
-
-    {
-        highlights && highlights.length > 0 && (
-            <ul class="mb-4 space-y-1">
-                {highlights.map((h) => (
-                    <li class="text-sm flex items-start gap-2 text-text-muted">
-                        <span class="text-accent">▸</span>
-                        {h}
-                    </li>
-                ))}
-            </ul>
-        )
-    }
-
-    {
-        showMeta && (
-            <div
-                class="flex items-center gap-4 text-xs text-text-muted mb-4"
-            >
-                {
-                    (stars ?? 0) > 0 && (
-                        <span class="inline-flex items-center gap-1.5">
-                            <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                width="14"
-                                height="14"
-                                viewBox="0 0 24 24"
-                                fill="currentColor"
-                                aria-hidden="true"
-                                class="text-accent"
-                            >
-                                <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
-                            </svg>
-                            {stars}
-                        </span>
-                    )
-                }
-                {
-                    (forks ?? 0) > 0 && (
-                        <span class="inline-flex items-center gap-1.5">
-                            <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                width="14"
-                                height="14"
-                                viewBox="0 0 24 24"
-                                fill="none"
-                                stroke="currentColor"
-                                stroke-width="2"
-                                stroke-linecap="round"
-                                stroke-linejoin="round"
-                                aria-hidden="true"
-                            >
-                                <circle cx="6" cy="6" r="3"></circle>
-                                <circle cx="18" cy="6" r="3"></circle>
-                                <circle cx="12" cy="18" r="3"></circle>
-                                <path d="M6 9v1a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V9"></path>
-                                <path d="M12 12v3"></path>
-                            </svg>
-                            {forks}
-                        </span>
-                    )
-                }
-            </div>
-        )
-    }
-
-    {
-        href && (
-            <span
-                class="project-cta text-sm font-medium text-accent mt-auto pt-3"
-            >
-                <span class="inline-block">{cta}</span>
-                <span class="project-arrow inline-block" aria-hidden="true">
-                    <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="14"
-                        height="14"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        stroke-width="2"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                    >
-                        <path d="M5 12h14"></path>
-                        <path d="m12 5 7 7-7 7"></path>
-                    </svg>
-                </span>
-            </span>
-        )
-    }
 </Card>

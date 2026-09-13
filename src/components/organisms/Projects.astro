@@ -1,58 +1,233 @@
 ---
 import SectionTitle from "../atoms/SectionTitle.astro";
-import ProjectCard from "../molecules/ProjectCard.astro";
 import Section from "../atoms/Section.astro";
-import { featuredProjects, hiddenRepos } from "../../data/projects";
-import { getReposWithLanguages } from "../../lib/github";
-
-const repos = (await getReposWithLanguages("Andresfernandezp94")).filter(
-    (repo) => !hiddenRepos.includes(repo.name),
-);
+import { hiddenRepos } from "../../data/projects";
+import { repoMilestones } from "../../data/repoExtras";
 ---
 
 <Section id="proyectos" ariaLabelledby="proyectos-title" class="pt-12 pb-8 reveal">
-    {
-        featuredProjects.length > 0 && (
-            <>
-                <SectionTitle title="Proyectos Destacados" id="proyectos-title" />
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12">
-                    {featuredProjects.map((project) => (
-                        <ProjectCard
-                            name={project.name}
-                            description={project.description}
-                            tags={project.stack}
-                            highlights={project.highlights}
-                            icon={project.icon}
-                            customIcon={project.customIcon}
-                            href={`/projects/${project.slug}`}
-                            cta="Ver Caso de Estudio →"
-                            class="reveal"
-                        />
-                    ))}
-                </div>
-            </>
-        )
+    <SectionTitle title="Proyectos" id="proyectos-title" />
+
+    <p id="repos-status" class="text-text-secondary">
+        Cargando proyectos…
+    </p>
+
+    <div
+        id="projects-layout"
+        class="hidden grid grid-cols-1 lg:grid-cols-[14rem_minmax(0,1fr)] gap-8 lg:gap-10 items-start"
+    >
+        <div class="projects-list" role="tablist" aria-label="Proyectos"></div>
+
+        <div class="projects-right">
+            <div class="project-panel-descriptions"></div>
+
+            <div class="project-viewer"></div>
+
+            <div class="project-panel-links"></div>
+        </div>
+    </div>
+</Section>
+
+<script define:vars={{ repoMilestones }}>
+    const GITHUB_USERNAME = "Andresfernandezp94";
+    const HIDDEN_REPOS = ["Portfolio", "Andresfernandezp94", "Andresfernandezp94.github.io"];
+
+    const icons = {
+        code: '<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="16 18 22 12 16 6"></polyline><polyline points="8 6 2 12 8 18"></polyline></svg>',
+        codeSmall: '<svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="16 18 22 12 16 6"></polyline><polyline points="8 6 2 12 8 18"></polyline></svg>',
+        github:
+            '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg>',
+    };
+
+    const langIcons = {
+        TypeScript:
+            '<rect x="3" y="3" width="18" height="18" rx="2"/><text x="12" y="16.5" text-anchor="middle" font-size="9" font-weight="700" fill="currentColor" stroke="none">TS</text>',
+        JavaScript:
+            '<rect x="3" y="3" width="18" height="18" rx="2"/><text x="12" y="16.5" text-anchor="middle" font-size="9" font-weight="700" fill="currentColor" stroke="none">JS</text>',
+        Python:
+            '<path d="M12 2c-3 0-6 .5-6 3v3h6v1H3v3c0 2 2 3 5 3h4v-2c0-2-2-3-5-3h2v-1H4V8c0-1.5 2-2 4-2h4c2 0 4 .5 4 2v3h-6v1h9v-3c0-2.5-3-3-7-3z"/><path d="M12 22c3 0 6-.5 6-3v-3h-6v-1h9v-3c0-2-2-3-5-3h-4v2c0 2 2 3 5 3h-2v1h5v4c0 1.5-2 2-4 2h-4c-2 0-4-.5-4-2v-3h6v-1H3v3c0 2.5 3 3 7 3z"/>',
+        Rust: '<circle cx="12" cy="12" r="8.4"/><circle cx="12" cy="12" r="3.6"/><path d="M12 1.6v3.2M12 19.2v3.2M1.6 12h3.2M19.2 12h3.2M4.8 4.8l2.3 2.3M16.9 16.9l2.3 2.3M19.2 4.8l-2.3 2.3M7.1 16.9L4.8 19.2"/>',
+        Docker:
+            '<path d="M13 2v6h-2v2h2v6h-2v2h2v2H3v-2H1v-2h2v-2H1V8h2V6h2v2h2V6h2V2h6zm6 8h-4v6h4v-6z"/>',
+        React:
+            '<circle cx="12" cy="12" r="2"/><ellipse cx="12" cy="12" rx="10" ry="4"/><ellipse cx="12" cy="12" rx="10" ry="4" transform="rotate(60 12 12)"/><ellipse cx="12" cy="12" rx="10" ry="4" transform="rotate(120 12 12)"/>',
+        Node: '<path d="M12 2L2 7v10l10 5 10-5V7L12 2zm0 2.5L19 8v8l-7 4-7-4V8l7-3.5z"/>',
+        Astro: '<path d="M12 2l-3 8-7 1 5 5-1 7 6-3 6 3-1-7 5-5-7-1z"/>',
+        Tailwind:
+            '<path d="M3 12c2-4 4-6 6-6s3 2 4 6 2 6 4 6 4-2 4-6M9 18c2-4 4-6 6-6s3 2 4 6"/>',
+        MongoDB:
+            '<path d="M12 2C8 6 6 10 6 14c0 4 2.5 7 6 8 3.5-1 6-4 6-8 0-4-2-8-6-12zm0 18c-2-2-2-6 0-10 2 4 2 8 0 10z"/>',
+    };
+
+    const langIcon = (name) => {
+        const paths =
+            langIcons[name] ??
+            '<polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/>';
+        return `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${paths}</svg>`;
+    };
+
+    const escapeHtml = (value) =>
+        value
+            .replaceAll("&", "&amp;")
+            .replaceAll("<", "&lt;")
+            .replaceAll(">", "&gt;")
+            .replaceAll('"', "&quot;")
+            .replaceAll("'", "&#39;");
+
+    const fmtDate = (iso) => iso.slice(0, 7);
+
+    const timelineItems = (repo) => {
+        const extra = repoMilestones[repo.name] ?? [];
+        const auto = [
+            {
+                period: fmtDate(repo.created_at),
+                title: "Inicio del repositorio",
+                summary: repo.description || "Repositorio público.",
+            },
+            {
+                period: fmtDate(repo.pushed_at),
+                title: "Última actividad",
+                summary: "Última actualización sincronizada con GitHub.",
+            },
+        ];
+        return [...extra, ...auto];
+    };
+
+    const timelineHtml = (repo) => {
+        const items = timelineItems(repo);
+        return `<ol class="timeline" style="--timeline-progress:1">${items
+            .map((item) => {
+                const topic = item.topic
+                    ? `<span class="timeline-topic">${icons.codeSmall}${escapeHtml(item.topic)}</span>`
+                    : "";
+                return `<li class="timeline-item is-visible">
+                    <span class="timeline-dot" aria-hidden="true"></span>
+                    <time class="timeline-period" datetime="${escapeHtml(item.period)}">${escapeHtml(item.period)}</time>
+                    <div class="timeline-content">
+                        ${topic}
+                        <h3>${escapeHtml(item.title)}</h3>
+                        <p>${escapeHtml(item.summary)}</p>
+                    </div>
+                </li>`;
+            })
+            .join("")}</ol>`;
+    };
+
+    const layoutEl = document.getElementById("projects-layout");
+    const statusEl = document.getElementById("repos-status");
+    const listEl = layoutEl && layoutEl.querySelector(".projects-list");
+    const descEl =
+        layoutEl && layoutEl.querySelector(".project-panel-descriptions");
+    const viewerEl = layoutEl && layoutEl.querySelector(".project-viewer");
+    const linksEl =
+        layoutEl && layoutEl.querySelector(".project-panel-links");
+
+    const select = (target) => {
+        listEl
+            .querySelectorAll(".project-picker")
+            .forEach((tab) => {
+                const active = tab.dataset.projectPicker === target;
+                tab.classList.toggle("is-active", active);
+                tab.setAttribute("aria-selected", String(active));
+            });
+        viewerEl
+            .querySelectorAll(".project-panel")
+            .forEach((panel) => {
+                const active = panel.dataset.projectPanel === target;
+                panel.classList.toggle("is-hidden", !active);
+            });
+        linksEl
+            .querySelectorAll(".project-panel-footer")
+            .forEach((footer) => {
+                const active = footer.dataset.projectFooter === target;
+                footer.classList.toggle("is-hidden", !active);
+            });
+        descEl
+            .querySelectorAll(".project-panel-desc")
+            .forEach((desc) => {
+                const active = desc.dataset.projectDesc === target;
+                desc.classList.toggle("is-hidden", !active);
+            });
+        viewerEl.scrollTop = 0;
+    };
+
+    function render(repos) {
+        if (!layoutEl || !listEl || !descEl || !viewerEl || !linksEl) return;
+
+        listEl.innerHTML = "";
+        descEl.innerHTML = "";
+        viewerEl.innerHTML = "";
+        linksEl.innerHTML = "";
+
+        repos.forEach((repo, i) => {
+            const isFirst = i === 0;
+            const safeName = escapeHtml(repo.name);
+            const safeDesc = escapeHtml(repo.description || "Sin descripción");
+
+            const picker = document.createElement("button");
+            picker.type = "button";
+            picker.className = `project-picker${isFirst ? " is-active" : ""}`;
+            picker.dataset.projectPicker = repo.name;
+            picker.setAttribute("aria-selected", String(isFirst));
+            picker.innerHTML = `<span class="card-icon-tile shrink-0" aria-hidden="true">${icons.code}</span>
+                <span class="project-picker-name">${safeName}</span>
+                <span class="project-picker-indicator" aria-hidden="true"></span>`;
+
+            const desc = document.createElement("p");
+            desc.className = `project-panel-desc${isFirst ? "" : " is-hidden"}`;
+            desc.dataset.projectDesc = repo.name;
+            desc.textContent = repo.description || "Sin descripción";
+
+            const panel = document.createElement("div");
+            panel.className = `project-panel${isFirst ? "" : " is-hidden"}`;
+            panel.dataset.projectPanel = repo.name;
+            panel.innerHTML = timelineHtml(repo);
+
+            const footer = document.createElement("div");
+            footer.className = `project-panel-footer${isFirst ? "" : " is-hidden"}`;
+            footer.dataset.projectFooter = repo.name;
+            if (repo.language) {
+                const tag = document.createElement("span");
+                tag.className = "tag";
+                tag.innerHTML = `${langIcon(repo.language)}${escapeHtml(repo.language)}`;
+                footer.appendChild(tag);
+            }
+            const link = document.createElement("p");
+            link.className = "project-panel-link";
+            link.innerHTML = `<a class="btn" href="${escapeHtml(repo.html_url)}" target="_blank" rel="noopener noreferrer">${icons.github}GitHub</a>`;
+            footer.appendChild(link);
+
+            listEl.appendChild(picker);
+            descEl.appendChild(desc);
+            viewerEl.appendChild(panel);
+            linksEl.appendChild(footer);
+        });
+
+        layoutEl.classList.remove("hidden");
+        statusEl.style.display = "none";
     }
 
-    {
-        repos.length > 0 && (
-            <>
-                <SectionTitle title="Repositorios en GitHub" />
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    {repos.map((repo) => (
-                        <ProjectCard
-                            name={repo.name}
-                            description={repo.description}
-                            tags={repo.languages.map((l) => l.language)}
-                            href={repo.html_url}
-                            stars={repo.stargazers_count}
-                            forks={repo.forks_count}
-                            cta="Ver Repositorio →"
-                            class="reveal"
-                        />
-                    ))}
-                </div>
-            </>
-        )
+    async function fetchRepos() {
+        const res = await fetch(
+            `https://api.github.com/users/${GITHUB_USERNAME}/repos?per_page=100&sort=updated`,
+        );
+        if (!res.ok) throw new Error("GitHub API " + res.status);
+        const repos = await res.json();
+        return repos
+            .filter((repo) => !repo.fork && !HIDDEN_REPOS.includes(repo.name))
+            .sort((a, b) => a.name.localeCompare(b.name));
     }
-</Section>
+
+    fetchRepos()
+        .then((repos) => {
+            if (!repos.length) {
+                statusEl.textContent = "Todavía no hay proyectos públicos en GitHub.";
+                return;
+            }
+            render(repos);
+        })
+        .catch(() => {
+            statusEl.textContent =
+                "No se pudieron cargar los proyectos ahora mismo. Vuelve a intentarlo en un momento.";
+        });
+</script>

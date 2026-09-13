@@ -16,7 +16,7 @@ export const featuredProjects: FeaturedProject[] = [
         slug: "neurox",
         customIcon: "/projects/neurox-icon.svg",
         description:
-            "Orquestador de agentes IA en Rust: daemon local con API HTTP/SSE, agentes aislados por sesión y clientes web/escritorio que comparten un único núcleo.",
+            "Orquestador de agentes IA en Rust: un daemon local con clientes web y de escritorio como thin clients.",
         stack: ["Rust", "Axum", "Tokio", "React", "Vite", "TypeScript", "Systemd", "SSE"],
         highlights: [
             "Daemon único, múltiples clientes thin",
@@ -30,7 +30,7 @@ export const featuredProjects: FeaturedProject[] = [
         slug: "omen",
         icon: "hardware",
         description:
-            "Stack Linux nativo para HP OMEN Transcend 14: drivers kernel, control térmico, RGB, servicios de IA sobre Intel NPU y configs de audio.",
+            "Linux nativo para HP OMEN Transcend 14: drivers, control térmico, RGB e IA sobre la NPU.",
         stack: ["Linux", "DKMS", "Python", "systemd", "OpenVINO", "Intel NPU"],
         highlights: [
             "Perfiles térmicos calibrados con histéresis",
@@ -41,4 +41,8 @@ export const featuredProjects: FeaturedProject[] = [
     },
 ];
 
-export const hiddenRepos: string[] = ["Portfolio", "Andresfernandezp94"];
+export const hiddenRepos: string[] = [
+    "Portfolio",
+    "Andresfernandezp94",
+    "Andresfernandezp94.github.io",
+];

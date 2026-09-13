@@ -14,7 +14,37 @@ const projects = defineCollection({
         role: z.string().optional(),
         icon: z.string().optional(),
         date: z.string().optional(),
+        milestones: z
+            .array(
+                z.object({
+                    period: z.string(),
+                    title: z.string(),
+                    summary: z.string(),
+                }),
+            )
+            .default([]),
     }),
 });
 
-export const collections = { projects };
+const blog = defineCollection({
+    loader: glob({ pattern: '**/*.md', base: './src/content/blog' }),
+    schema: z.object({
+        title: z.string(),
+        description: z.string(),
+        order: z.number().default(99),
+        period: z.string(),
+        level: z.string().optional(),
+        icon: z.string().optional(),
+        milestones: z
+            .array(
+                z.object({
+                    period: z.string(),
+                    title: z.string(),
+                    summary: z.string(),
+                }),
+            )
+            .default([]),
+    }),
+});
+
+export const collections = { projects, blog };
