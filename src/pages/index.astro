@@ -4,7 +4,7 @@ import Hero from "../components/organisms/Hero.astro";
 import About from "../components/organisms/About.astro";
 import Skills from "../components/organisms/Skills.astro";
 import Projects from "../components/organisms/Projects.astro";
-import Contact from "../components/organisms/Contact.astro";
+// import Contact from "../components/organisms/Contact.astro";
 
 const site = Astro.site ?? new URL("https://andresfernandezp94.com");
 const url = site.toString();
@@ -43,5 +43,8 @@ const jsonLd = {
     <About />
     <Projects />
     <Skills />
-    <Contact />
+    {/* Sección de contacto oculta temporalmente.
+       Reactivar descomentando el import de arriba y la línea siguiente:
+       <Contact />
+    */}
 </MainLayout>
