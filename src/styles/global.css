@@ -349,6 +349,30 @@
         transform: translateX(0.2rem);
     }
 
+    /* Sección de stack */
+    .stack-group-title {
+        font-size: 0.9375rem;
+        font-weight: 600;
+        color: var(--color-text);
+    }
+
+    .stack-group-icon {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 1.75rem;
+        height: 1.75rem;
+        border-radius: 0.4rem;
+        background-color: var(--color-accent-light);
+        color: var(--color-accent);
+    }
+
+    .stack-group ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+
     .section-bar {
         width: 3rem;
         height: 0.25rem;

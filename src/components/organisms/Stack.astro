@@ -1,0 +1,69 @@
+---
+import SectionTitle from "../atoms/SectionTitle.astro";
+import Section from "../atoms/Section.astro";
+import Tag from "../atoms/Tag.astro";
+import Icon from "../atoms/Icon.astro";
+import { stackGroups } from "../../data/stack";
+import { getProvider, getTagIcon } from "../../data/providers";
+
+interface Props {
+    titleLevel?: 1 | 2;
+    class?: string;
+}
+
+const { titleLevel = 2, class: className = "pt-12 pb-8 reveal" } = Astro.props;
+---
+
+<Section id="stack" class={className}>
+    <SectionTitle title="Stack" id="stack-title" level={titleLevel} />
+
+    <p class="text-lg text-text-secondary mb-10 max-w-2xl">
+        Las herramientas con las que trabajo a diario, no una lista de todo lo
+        que he tocado.
+    </p>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-x-10 gap-y-8">
+        {
+            stackGroups.map((group) => (
+                <div class="stack-group">
+                    <div class="flex items-center gap-2.5 mb-3">
+                        <span class="stack-group-icon" aria-hidden="true">
+                            <Icon name={group.icon} size={16} />
+                        </span>
+                        <h3
+                            id={`stack-${group.title}`}
+                            class="stack-group-title"
+                        >
+                            {group.title}
+                        </h3>
+                    </div>
+
+                    <p class="text-sm text-text-secondary leading-relaxed mb-4">
+                        {group.description}
+                    </p>
+
+                    <ul
+                        class="flex flex-wrap gap-1.5"
+                        aria-labelledby={`stack-${group.title}`}
+                    >
+                        {group.items.map((item) => {
+                            const provider = getProvider(item);
+                            const icon = getTagIcon(item);
+                            return (
+                                <li>
+                                    <Tag
+                                        label={item}
+                                        providerAbbr={provider?.abbr}
+                                        providerColor={provider?.color}
+                                        providerBg={provider?.bg}
+                                        tagIcon={icon}
+                                    />
+                                </li>
+                            );
+                        })}
+                    </ul>
+                </div>
+            ))
+        }
+    </div>
+</Section>

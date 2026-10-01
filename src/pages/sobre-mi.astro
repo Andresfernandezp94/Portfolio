@@ -1,6 +1,7 @@
 ---
 import MainLayout from "../layouts/MainLayout.astro";
 import About from "../components/organisms/About.astro";
+import Stack from "../components/organisms/Stack.astro";
 
 const site = Astro.site ?? new URL("https://andresfernandezp94.com");
 const url = site.toString();
@@ -39,4 +40,5 @@ const jsonLd = {
     jsonLd={[jsonLd]}
 >
     <About titleLevel={1} class="pt-32 pb-8 reveal" />
+    <Stack />
 </MainLayout>

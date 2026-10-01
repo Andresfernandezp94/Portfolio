@@ -16,7 +16,19 @@ export type ProviderKey =
     | "tailwind"
     | "bluetooth"
     | "linux"
-    | "graphql";
+    | "graphql"
+    | "dbt"
+    | "parquet"
+    | "bash"
+    | "sql"
+    | "git"
+    | "fastify"
+    | "vitest"
+    | "mcp"
+    | "kubernetes"
+    | "whisper"
+    | "guardrails"
+    | "firmware";
 
 export interface ProviderInfo {
     abbr: string;
@@ -134,6 +146,78 @@ export const PROVIDERS: Record<ProviderKey, ProviderInfo> = {
         bg: "rgba(225,0,152,0.15)",
         icon: "graphql",
     },
+    dbt: {
+        abbr: "DBT",
+        color: "#FF694A",
+        bg: "rgba(255,105,74,0.15)",
+        icon: "sql",
+    },
+    parquet: {
+        abbr: "PQ",
+        color: "#5B8FF9",
+        bg: "rgba(91,143,249,0.15)",
+        icon: "data",
+    },
+    bash: {
+        abbr: "SH",
+        color: "#89E051",
+        bg: "rgba(137,224,81,0.15)",
+        icon: "bash",
+    },
+    sql: {
+        abbr: "SQL",
+        color: "#E38C00",
+        bg: "rgba(227,140,0,0.15)",
+        icon: "sql",
+    },
+    git: {
+        abbr: "GIT",
+        color: "#F05032",
+        bg: "rgba(240,80,50,0.15)",
+        icon: "git",
+    },
+    fastify: {
+        abbr: "FTY",
+        color: "#8FB8FF",
+        bg: "rgba(143,184,255,0.15)",
+        icon: "zap",
+    },
+    vitest: {
+        abbr: "VIT",
+        color: "#729B1B",
+        bg: "rgba(114,155,27,0.15)",
+        icon: "code",
+    },
+    mcp: {
+        abbr: "MCP",
+        color: "#8A7CFF",
+        bg: "rgba(138,124,255,0.15)",
+        icon: "cube",
+    },
+    kubernetes: {
+        abbr: "K8S",
+        color: "#326CE5",
+        bg: "rgba(50,108,229,0.15)",
+        icon: "kubernetes",
+    },
+    whisper: {
+        abbr: "WSP",
+        color: "#10A37F",
+        bg: "rgba(16,163,127,0.15)",
+        icon: "wave",
+    },
+    guardrails: {
+        abbr: "GRD",
+        color: "#E5484D",
+        bg: "rgba(229,72,77,0.15)",
+        icon: "ai",
+    },
+    firmware: {
+        abbr: "FW",
+        color: "#8A7CFF",
+        bg: "rgba(138,124,255,0.15)",
+        icon: "chip",
+    },
 };
 
 const TAG_TO_PROVIDER: Record<string, ProviderKey> = {
@@ -178,6 +262,20 @@ const TAG_TO_PROVIDER: Record<string, ProviderKey> = {
     "systemd": "linux",
     "DBus": "linux",
     "GraphQL": "graphql",
+    "AWS Lambda": "aws",
+    "ECS": "aws",
+    "Kubernetes": "kubernetes",
+    "dbt": "dbt",
+    "Parquet": "parquet",
+    "SQL": "sql",
+    "Bash": "bash",
+    "Git": "git",
+    "Fastify": "fastify",
+    "Vitest": "vitest",
+    "MCP": "mcp",
+    "Whisper": "whisper",
+    "Guardrails": "guardrails",
+    "Firmware": "firmware",
 };
 
 const TAG_TO_ICON: Record<string, string> = {
@@ -221,6 +319,8 @@ const TAG_TO_ICON: Record<string, string> = {
     "Embeddings": "ai",
     "OpenVINO": "intel",
     "Multi-agent": "ai",
+    "Guardrails": "ai",
+    "Whisper": "wave",
     "CloudFormation": "aws",
     "Lambda": "aws",
     "EventBridge": "aws",
@@ -242,6 +342,19 @@ const TAG_TO_ICON: Record<string, string> = {
     "ETL": "data",
     "KPI automation": "data",
     "Genesys Cloud": "genesys",
+    "AWS Lambda": "aws",
+    "ECS": "cloud",
+    "Kubernetes": "kubernetes",
+    "dbt": "sql",
+    "Parquet": "data",
+    "SQL": "sql",
+    "Bash": "bash",
+    "Git": "git",
+    "Fastify": "zap",
+    "Vitest": "code",
+    "MCP": "cube",
+    "Firmware": "chip",
+    "Linux": "linux",
 };
 
 export function getProvider(tagName: string): ProviderInfo | undefined {
