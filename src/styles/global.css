@@ -128,7 +128,9 @@
     .back-to-top {
         position: fixed;
         right: 1.5rem;
-        bottom: 1.5rem;
+        /* Se apoya sobre el footer fijo: --footer-height lo mide el script,
+           de modo que nunca queda a media altura del footer. */
+        bottom: calc(var(--footer-height, 3.5rem) + 1.25rem);
         z-index: 40;
         display: inline-flex;
         align-items: center;

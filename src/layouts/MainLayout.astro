@@ -180,6 +180,25 @@ const jsonLdArray = jsonLd
             const progressBar = document.getElementById("scroll-progress");
             const backToTop = document.getElementById("back-to-top");
 
+            // El footer es fijo y cambia de alto (una o dos filas según el
+            // ancho), así que medimos su altura para que el botón "subir"
+            // quede por encima en vez de sobre él.
+            const footer = document.querySelector("footer");
+            const syncFooterHeight = () => {
+                if (!footer) return;
+                const height = footer.getBoundingClientRect().height;
+                if (height > 0) {
+                    document.documentElement.style.setProperty(
+                        "--footer-height",
+                        `${height}px`,
+                    );
+                }
+            };
+            syncFooterHeight();
+            window.addEventListener("resize", syncFooterHeight, {
+                passive: true,
+            });
+
             const docHeight = () =>
                 document.documentElement.scrollHeight -
                 window.innerHeight;
