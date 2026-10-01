@@ -3,6 +3,18 @@ import SectionTitle from "../atoms/SectionTitle.astro";
 import Section from "../atoms/Section.astro";
 import Stat from "../molecules/Stat.astro";
 
+interface Props {
+    /** Nivel del encabezado del título. Usa 1 en la página /sobre-mi. */
+    titleLevel?: 1 | 2;
+    /** Permite ajustar el espaciado cuando la sección abre una página propia. */
+    class?: string;
+}
+
+const {
+    titleLevel = 2,
+    class: className = "pt-12 pb-8 reveal",
+} = Astro.props;
+
 const quickFacts = [
     { label: "Rol", value: "Data Platform Engineer" },
     { label: "Nube", value: "AWS · serverless" },
@@ -11,8 +23,8 @@ const quickFacts = [
 ];
 ---
 
-<Section id="sobre-mi" ariaLabelledby="sobre-mi-title" class="pt-12 pb-8 reveal">
-    <SectionTitle title="Sobre mí" id="sobre-mi-title" />
+<Section id="sobre-mi" ariaLabelledby="sobre-mi-title" class={className}>
+    <SectionTitle title="Sobre mí" id="sobre-mi-title" level={titleLevel} />
 
     <div class="grid grid-cols-1 lg:grid-cols-[1fr_18rem] gap-10 lg:gap-14">
         <div class="space-y-5">

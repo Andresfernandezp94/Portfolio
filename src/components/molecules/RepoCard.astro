@@ -1,0 +1,66 @@
+---
+interface Props {
+    /** Con true emite el marcado dentro de un <template> para clonarlo por JS. */
+    template?: boolean;
+    /** id del <template>, requerido cuando template es true. */
+    id?: string;
+}
+
+const { template = false, id } = Astro.props;
+---
+
+{
+    template ? (
+        <template id={id}>
+            <article class="card card-ghost card-hover repo-card">
+                <span class="card-icon-tile shrink-0" aria-hidden="true">
+                    <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="18"
+                        height="18"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                    >
+                        <polyline points="16 18 22 12 16 6"></polyline>
+                        <polyline points="8 6 2 12 8 18"></polyline>
+                    </svg>
+                </span>
+
+                <h3 class="repo-card-name" data-field="name"></h3>
+
+                <p class="repo-card-desc" data-field="description"></p>
+
+                <div class="repo-card-meta">
+                    <span class="tag is-hidden" data-field="language"></span>
+                    <span
+                        class="repo-card-cta"
+                        data-field="cta"
+                        aria-hidden="true"
+                    >
+                        Ver en GitHub
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="14"
+                            height="14"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                        >
+                            <path d="M7 17 17 7"></path>
+                            <path d="M7 7h10v10"></path>
+                        </svg>
+                    </span>
+                </div>
+            </article>
+        </template>
+    ) : (
+        <slot />
+    )
+}

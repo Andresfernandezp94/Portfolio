@@ -40,9 +40,3 @@ export const featuredProjects: FeaturedProject[] = [
         github: "https://github.com/Andresfernandezp94/omen",
     },
 ];
-
-export const hiddenRepos: string[] = [
-    "Portfolio",
-    "Andresfernandezp94",
-    "Andresfernandezp94.github.io",
-];

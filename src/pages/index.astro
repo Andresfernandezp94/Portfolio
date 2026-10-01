@@ -1,9 +1,8 @@
 ---
 import MainLayout from "../layouts/MainLayout.astro";
 import Hero from "../components/organisms/Hero.astro";
-import About from "../components/organisms/About.astro";
 import Skills from "../components/organisms/Skills.astro";
-import Projects from "../components/organisms/Projects.astro";
+// import Projects from "../components/organisms/Projects.astro";
 // import Contact from "../components/organisms/Contact.astro";
 
 const site = Astro.site ?? new URL("https://andresfernandezp94.com");
@@ -40,8 +39,10 @@ const jsonLd = {
 
 <MainLayout title="Andres Fernandez — Data Platform Engineer" jsonLd={[jsonLd]}>
     <Hero />
-    <About />
-    <Projects />
+    {/* Sección de proyectos oculta: ahora vive en /proyectos.
+       Reactivar aquí descomentando el import de arriba y la línea siguiente:
+       <Projects />
+    */}
     <Skills />
     {/* Sección de contacto oculta temporalmente.
        Reactivar descomentando el import de arriba y la línea siguiente:

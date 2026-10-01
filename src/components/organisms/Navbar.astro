@@ -4,9 +4,16 @@ import NavLink from "../molecules/NavLink.astro";
 // Link "Contacto" oculto junto con la sección de contacto.
 // Reactivar junto con <Contact /> en src/pages/index.astro
 const links = [
-    { label: "Sobre mí", href: "#sobre-mi" },
-    { label: "Proyectos", href: "#proyectos" },
+    { label: "Sobre mí", href: "/sobre-mi" },
+    { label: "Proyectos", href: "/proyectos" },
 ];
+
+// Marca como activo el link de la ruta actual para páginas distintas del home.
+const currentPath = Astro.url.pathname.replace(/\/$/, "") || "/";
+const navLinks = links.map((link) => ({
+    ...link,
+    active: currentPath === link.href,
+}));
 ---
 
 <nav
@@ -17,7 +24,7 @@ const links = [
             AF<span class="text-accent">.</span>
         </a>
         <div class="hidden md:flex items-center gap-8">
-            {links.map((link) => <NavLink {...link} />)}
+            {navLinks.map((link) => <NavLink {...link} />)}
         </div>
         <button
             id="mobile-menu-btn"
@@ -48,7 +55,7 @@ const links = [
         id="mobile-menu"
         class="hidden md:hidden px-6 pb-4 flex-col gap-4"
     >
-        {links.map((link) => <NavLink {...link} />)}
+        {navLinks.map((link) => <NavLink {...link} />)}
     </div>
     <div class="scroll-progress" id="scroll-progress" aria-hidden="true"></div>
 </nav>

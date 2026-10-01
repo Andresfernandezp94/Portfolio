@@ -5,12 +5,20 @@ interface Props {
     title: string;
     id?: string;
     class?: string;
+    /** Nivel del encabezado. Usa 1 cuando el título es el h1 de una página propia. */
+    level?: 1 | 2;
 }
-const { title, id, class: className = "" } = Astro.props;
+const {
+    title,
+    id,
+    class: className = "",
+    level = 2,
+} = Astro.props;
+const Heading = level === 1 ? "h1" : "h2";
 ---
 
 <div class:list={["mb-2", className]}>
-    {id ? <h2 id={id} class="text-3xl font-bold">{title}</h2> : <h2 class="text-3xl font-bold">{title}</h2>}
+    <Heading id={id} class="text-3xl font-bold">{title}</Heading>
     <slot name="subtitle" />
 </div>
 <AccentBar />

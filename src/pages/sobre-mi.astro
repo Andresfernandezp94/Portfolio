@@ -1,0 +1,42 @@
+---
+import MainLayout from "../layouts/MainLayout.astro";
+import About from "../components/organisms/About.astro";
+
+const site = Astro.site ?? new URL("https://andresfernandezp94.com");
+const url = site.toString();
+const pageURL = new URL(Astro.url.pathname, site).toString();
+
+const description =
+    "Andres Fernandez — Data Platform Engineer. Plataformas de datos, IA e infraestructura cloud en producción.";
+
+const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "ProfilePage",
+    "@id": `${pageURL}#profilepage`,
+    url: pageURL,
+    name: "Sobre mí — Andres Fernandez",
+    description,
+    inLanguage: "es",
+    isPartOf: { "@id": `${url}#website` },
+    about: {
+        "@type": "Person",
+        "@id": `${url}#person`,
+        url,
+        name: "Andres Fernandez",
+        jobTitle: "Data Platform Engineer | BI Solutions Architect",
+        email: "mailto:andresfernandezp94@gmail.com",
+        sameAs: [
+            "https://github.com/Andresfernandezp94",
+            "https://www.linkedin.com/in/andresfernandezp94",
+        ],
+    },
+};
+---
+
+<MainLayout
+    title="Sobre mí | Andres Fernandez"
+    description={description}
+    jsonLd={[jsonLd]}
+>
+    <About titleLevel={1} class="pt-32 pb-8 reveal" />
+</MainLayout>

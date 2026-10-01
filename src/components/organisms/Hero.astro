@@ -34,7 +34,26 @@ const lastName = "Fernandez";
     </p>
 
     <div class="mt-10 flex flex-wrap gap-4">
-        <Button href="#proyectos" label="Ver proyectos">
+        {/* El orden sigue al del header: Sobre mí, Proyectos. */}
+        <Button href="/sobre-mi" label="Sobre mí">
+            <svg
+                slot="icon"
+                xmlns="http://www.w3.org/2000/svg"
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                aria-hidden="true"
+            >
+                <circle cx="12" cy="8" r="4"></circle>
+                <path d="M4 21a8 8 0 0 1 16 0"></path>
+            </svg>
+        </Button>
+        <Button href="/proyectos" label="Ver proyectos">
             <svg
                 slot="icon"
                 xmlns="http://www.w3.org/2000/svg"

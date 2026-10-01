@@ -205,13 +205,23 @@ const jsonLdArray = jsonLd
             window.addEventListener("scroll", onScroll, { passive: true });
             onScroll();
 
+            // Los links del nav pueden ser anclas puras (#seccion) o rutas con
+            // ancla (/sobre-mi, /#proyectos): extraemos el id del hash.
+            const hashId = (href: string | null) => {
+                const hash = href?.split("#")[1];
+                return hash ? decodeURIComponent(hash) : undefined;
+            };
+
             const spyLinks = Array.from(
-                document.querySelectorAll<HTMLAnchorElement>(
-                    'nav a[href^="#"]',
-                ),
-            );
+                document.querySelectorAll<HTMLAnchorElement>("nav a[href]"),
+            )
+                .map((link) => ({ link, id: hashId(link.getAttribute("href")) }))
+                .filter(
+                    (item): item is { link: HTMLAnchorElement; id: string } =>
+                        item.id !== undefined,
+                );
             const targets = spyLinks
-                .map((link) => document.getElementById(link.getAttribute("href")!.slice(1)))
+                .map(({ id }) => document.getElementById(id))
                 .filter((el): el is HTMLElement => el !== null);
 
             if ("IntersectionObserver" in window && targets.length > 0) {
@@ -219,10 +229,8 @@ const jsonLdArray = jsonLd
                     (entries) => {
                         for (const entry of entries) {
                             if (!entry.isIntersecting) continue;
-                            for (const link of spyLinks) {
-                                const active =
-                                    link.getAttribute("href") ===
-                                    `#${entry.target.id}`;
+                            for (const { link, id } of spyLinks) {
+                                const active = id === entry.target.id;
                                 link.classList.toggle("is-active", active);
                                 if (active) {
                                     link.setAttribute("aria-current", "true");

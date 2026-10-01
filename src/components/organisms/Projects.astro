@@ -1,17 +1,43 @@
 ---
 import SectionTitle from "../atoms/SectionTitle.astro";
 import Section from "../atoms/Section.astro";
-import { hiddenRepos } from "../../data/projects";
+import RepoCard from "../molecules/RepoCard.astro";
 import { repoMilestones } from "../../data/repoExtras";
+
+// Timeline oculto temporalmente. Poner en true para volver a mostrarlo.
+// Marca única: la usan el marcado de abajo y el script del cliente.
+const showTimeline = false;
+
+interface Props {
+    /** Nivel del encabezado. Usa 1 en la página /proyectos. */
+    titleLevel?: 1 | 2;
+    /** Ajusta el espaciado cuando la sección abre una página propia. */
+    class?: string;
+}
+
+const {
+    titleLevel = 2,
+    class: className = "pt-12 pb-8 reveal",
+} = Astro.props;
 ---
 
-<Section id="proyectos" ariaLabelledby="proyectos-title" class="pt-12 pb-8 reveal">
-    <SectionTitle title="Proyectos" id="proyectos-title" />
+<Section id="proyectos" ariaLabelledby="proyectos-title" class={className}>
+    <SectionTitle title="Proyectos" id="proyectos-title" level={titleLevel} />
 
     <p id="repos-status" class="text-text-secondary">
         Cargando proyectos…
     </p>
 
+    {/* Grid de cards: implementación actual. */}
+    <div
+        id="project-cards"
+        class="hidden grid grid-cols-1 sm:grid-cols-2 gap-6"
+        aria-labelledby="proyectos-title"
+    >
+    </div>
+
+    {/* Layout anterior de pickers + panel, oculto. Reactivar quitando
+         "hidden" de #projects-layout y calling render() en el script. */}
     <div
         id="projects-layout"
         class="hidden grid grid-cols-1 lg:grid-cols-[14rem_minmax(0,1fr)] gap-8 lg:gap-10 items-start"
@@ -21,16 +47,26 @@ import { repoMilestones } from "../../data/repoExtras";
         <div class="projects-right">
             <div class="project-panel-descriptions"></div>
 
-            <div class="project-viewer"></div>
+            {/* Timeline oculto mientras showTimeline sea false en el frontmatter. */}
+            <div class:list={["project-viewer", !showTimeline && "is-hidden"]}>
+            </div>
 
             <div class="project-panel-links"></div>
         </div>
     </div>
 </Section>
 
-<script define:vars={{ repoMilestones }}>
+<RepoCard template id="repo-card-template" />
+
+<script define:vars={{ repoMilestones, showTimeline }}>
     const GITHUB_USERNAME = "Andresfernandezp94";
-    const HIDDEN_REPOS = ["Portfolio", "Andresfernandezp94", "Andresfernandezp94.github.io"];
+
+    // Repos que no se listan como proyectos: el perfil y este mismo sitio.
+    const HIDDEN_REPOS = ["Andresfernandezp94", "Portfolio"];
+
+    // Las funciones timelineItems/timelineHtml se conservan intactas
+    // mientras showTimeline sea false en el frontmatter.
+    const SHOW_TIMELINE = showTimeline;
 
     const icons = {
         code: '<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="16 18 22 12 16 6"></polyline><polyline points="8 6 2 12 8 18"></polyline></svg>',
@@ -113,6 +149,52 @@ import { repoMilestones } from "../../data/repoExtras";
             .join("")}</ol>`;
     };
 
+    // Renderiza una card por repo clonando el <template> de RepoCard.
+    function renderCards(repos) {
+        const gridEl = document.getElementById("project-cards");
+        const templateEl = document.getElementById("repo-card-template");
+        if (!gridEl || !templateEl) return;
+
+        gridEl.innerHTML = "";
+        for (const repo of repos) {
+            const frag = templateEl.content.cloneNode(true);
+            const card = frag.querySelector(".repo-card");
+            if (!card) continue;
+
+            const setField = (name, value) => {
+                const el = frag.querySelector(`[data-field="${name}"]`);
+                if (el) el.textContent = value;
+            };
+
+            setField("name", repo.name);
+            setField("description", repo.description || "Sin descripción");
+
+            if (repo.language) {
+                const tag = frag.querySelector('[data-field="language"]');
+                if (tag) {
+                    tag.textContent = repo.language;
+                    tag.classList.remove("is-hidden");
+                }
+            }
+
+            // El enlace envuelve la card completa y mantiene el patrón visual
+            // de las cards del sitio, con un único destino por tarjeta.
+            const link = document.createElement("a");
+            link.href = repo.html_url;
+            link.className = "repo-card-link";
+            link.target = "_blank";
+            link.rel = "noopener noreferrer";
+            link.setAttribute(
+                "aria-label",
+                `Ver ${repo.name} en GitHub`,
+            );
+            link.appendChild(frag);
+            gridEl.appendChild(link);
+        }
+
+        gridEl.classList.remove("hidden");
+    }
+
     const layoutEl = document.getElementById("projects-layout");
     const statusEl = document.getElementById("repos-status");
     const listEl = layoutEl && layoutEl.querySelector(".projects-list");
@@ -181,7 +263,7 @@ import { repoMilestones } from "../../data/repoExtras";
             const panel = document.createElement("div");
             panel.className = `project-panel${isFirst ? "" : " is-hidden"}`;
             panel.dataset.projectPanel = repo.name;
-            panel.innerHTML = timelineHtml(repo);
+            if (SHOW_TIMELINE) panel.innerHTML = timelineHtml(repo);
 
             const footer = document.createElement("div");
             footer.className = `project-panel-footer${isFirst ? "" : " is-hidden"}`;
@@ -209,12 +291,19 @@ import { repoMilestones } from "../../data/repoExtras";
 
     async function fetchRepos() {
         const res = await fetch(
-            `https://api.github.com/users/${GITHUB_USERNAME}/repos?per_page=100&sort=updated`,
+            `https://api.github.com/users/${GITHUB_USERNAME}/repos?per_page=100&type=owner&sort=updated`,
         );
         if (!res.ok) throw new Error("GitHub API " + res.status);
         const repos = await res.json();
+        // La API sin sesión solo devuelve repos públicos: los privados
+        // quedan fuera por sí solos, igual que los forks.
         return repos
-            .filter((repo) => !repo.fork && !HIDDEN_REPOS.includes(repo.name))
+            .filter(
+                (repo) =>
+                    !repo.fork &&
+                    repo.private === false &&
+                    !HIDDEN_REPOS.includes(repo.name),
+            )
             .sort((a, b) => a.name.localeCompare(b.name));
     }
 
@@ -224,7 +313,9 @@ import { repoMilestones } from "../../data/repoExtras";
                 statusEl.textContent = "Todavía no hay proyectos públicos en GitHub.";
                 return;
             }
-            render(repos);
+            renderCards(repos);
+            statusEl.style.display = "none";
+            // render(repos) es el layout antiguo de pickers, ahora oculto.
         })
         .catch(() => {
             statusEl.textContent =

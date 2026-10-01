@@ -1,0 +1,31 @@
+---
+import MainLayout from "../layouts/MainLayout.astro";
+import Projects from "../components/organisms/Projects.astro";
+
+const site = Astro.site ?? new URL("https://andresfernandezp94.com");
+const url = site.toString();
+const pageURL = new URL(Astro.url.pathname, site).toString();
+
+const description =
+    "Proyectos de Andres Fernandez — Data Platform Engineer. Plataformas de datos, IA e infraestructura cloud.";
+
+const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "CollectionPage",
+    "@id": `${pageURL}#collectionpage`,
+    url: pageURL,
+    name: "Proyectos — Andres Fernandez",
+    description,
+    inLanguage: "es",
+    isPartOf: { "@id": `${url}#website` },
+    about: { "@id": `${url}#person` },
+};
+---
+
+<MainLayout
+    title="Proyectos | Andres Fernandez"
+    description={description}
+    jsonLd={[jsonLd]}
+>
+    <Projects titleLevel={1} class="pt-32 pb-8 reveal" />
+</MainLayout>
